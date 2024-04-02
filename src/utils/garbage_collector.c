@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 07:56:02 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/04/01 10:51:30 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/04/02 08:34:08 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,41 +50,41 @@ void	add_garbage(t_garbage **garbage, void *ptr)
 
 void	clear_garbage(t_garbage **garbage)
 {
-	t_garbage	*tmp;
 	t_garbage	*next;
 
 	if (!*garbage)
 		return ;
-	tmp = *garbage;
-	while (tmp)
+	while (*garbage)
 	{
-		next = tmp->next;
-		free(tmp->content);
-		tmp->content = NULL;
-		free(tmp);
-		tmp = next;
+		next = (*garbage)->next;
+		free((*garbage)->content);
+		(*garbage)->content = NULL;
+		free(*garbage);
+		*garbage = next;
 	}
 	*garbage = NULL;
 }
 
 void	delete_garbage(t_garbage **garbage, void *ptr)
 {
-	t_garbage	*tmp;
-	t_garbage	*to_free;
+    t_garbage	*tmp;
+    t_garbage	*prev;
 
-	if (!*garbage || !ptr)
-		return ;
 	tmp = *garbage;
-	while (tmp->next)
+	prev = NULL;
+    while (tmp)
 	{
-		if (tmp->next->content == ptr)
+		if (tmp->content == ptr)
 		{
-			to_free = tmp->next;
-			tmp->next = tmp->next->next;
-			free(to_free->content);
-			to_free->content = NULL;
-			free(to_free);
+			if (prev)
+				prev->next = tmp->next;
+			else
+				*garbage = tmp->next;
+			free(tmp->content);
+			free(tmp);
+			return;
 		}
+		prev = tmp;
 		tmp = tmp->next;
 	}
 }
@@ -96,7 +96,7 @@ void	garbage_collector(t_garbage_action action, void *ptr)
 	if (action == ADD)
 		add_garbage(&garbage, ptr);
 	else if (action == DELETE)
-	delete_garbage(&garbage, ptr);
+		delete_garbage(&garbage, ptr);
 	else if (action == CLEAR)
 		clear_garbage(&garbage);
 }

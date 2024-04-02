@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 13:17:55 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/04/01 10:35:48 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/04/02 08:17:35 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ int	read_file(int fd, char **ptr)
 	char	*buffer;
 	int		i;
 
-	ptread = ft_malloc(BUFFER_SIZE + 1, sizeof(char));
+	ptread = ft_calloc(sizeof(char), BUFFER_SIZE + 1);
 	if (!ptread)
 		return (-1);
 	i = read(fd, ptread, BUFFER_SIZE);
@@ -74,7 +74,7 @@ char	*check_cache(char **ptr)
 {
 	if (!*ptr)
 	{
-		*ptr = ft_malloc(BUFFER_SIZE + 1, sizeof(char));
+		*ptr = ft_calloc(sizeof(char), BUFFER_SIZE + 1);
 		if (!*ptr)
 			return (NULL);
 	}

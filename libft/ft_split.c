@@ -6,11 +6,12 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/04 17:10:19 by tclaereb          #+#    #+#             */
-/*   Updated: 2023/11/06 12:04:51 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/04/02 09:30:16 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include "../includes/so_long.h"
 
 static unsigned int	count_strings(char const *s, char c)
 {
@@ -46,9 +47,10 @@ static char	*apply_string(const char *s, char c)
 		len++;
 	if (len == 0)
 		return (NULL);
-	str = (char *)malloc(len + 1);
+	str = (char *)malloc(sizeof(char) * (len + 1));
 	if (!str)
 		return (NULL);
+	garbage_collector(ADD, str);
 	ft_strlcpy(str, s, len + 1);
 	return (str);
 }
@@ -91,6 +93,7 @@ char	**ft_split(char const *s, char c)
 	result = (char **)malloc((count + 1) * sizeof(char *));
 	if (!result)
 		return (NULL);
+	garbage_collector(ADD, result);
 	if (!fill_result(result, s, c))
 	{
 		i = 0;

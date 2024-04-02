@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/25 14:39:28 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/04/01 10:38:01 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/04/02 08:05:19 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,8 @@ typedef struct s_map
 	struct s_map	*upper;
 	struct s_map	*below;
 } t_map;
+
+//#define malloc(size) ft_malloc(size, 1)
 
 void	*ft_malloc(size_t size, size_t nmemb);
 void	ft_error(t_error error);
