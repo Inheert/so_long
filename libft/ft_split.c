@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/04 17:10:19 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/04/02 09:30:16 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/04/02 10:26:43 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,6 @@ static int	fill_result(char **result, char const *s, char c)
 char	**ft_split(char const *s, char c)
 {
 	unsigned int	count;
-	unsigned int	i;
 	char			**result;
 
 	if (!s)
@@ -95,13 +94,7 @@ char	**ft_split(char const *s, char c)
 		return (NULL);
 	garbage_collector(ADD, result);
 	if (!fill_result(result, s, c))
-	{
-		i = 0;
-		while (result[i])
-			free(result[i++]);
-		free(result);
-		return (NULL);
-	}
+		ft_error(MALLOC_ERROR);
 	result[count] = NULL;
 	return (result);
 }
