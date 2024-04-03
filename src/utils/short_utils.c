@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 09:11:56 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/04/01 10:34:50 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/04/03 11:01:39 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,4 +49,41 @@ char	*ft_strjoin_enhanced(char *s1, char *s2)
 	ft_strlcat(s, s1, ls1 + 1);
 	ft_strlcat(s + ls1, s2, ls2 + 1);
 	return (s);
+}
+
+ssize_t str_ptr_len(char **str)
+{
+	ssize_t	len;
+
+	if (!str)
+		return (0);
+
+	len = 0;
+	while (*str)
+	{
+		len++;
+		str++;
+	}
+	return (len);
+}
+
+int	is_valid_symbol(char symbol[2])
+{
+	const char *symbols[5] = {
+		"0\0",
+		"1\0",
+		"C\0",
+		"E\0",
+		"P\0"
+	};
+	int	i;
+
+	i = 0;
+	while (i < 5)
+	{
+		if (ft_strncmp(symbols[i], symbol, 2) == 0)
+			return (1);
+		i++;
+	}
+	return (0);
 }
