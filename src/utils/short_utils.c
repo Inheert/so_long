@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 09:11:56 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/04/03 11:01:39 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/04/05 14:01:16 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ ssize_t str_ptr_len(char **str)
 
 int	is_valid_symbol(char symbol[2])
 {
-	const char *symbols[5] = {
+	const char	*symbols[5] = {
 		"0\0",
 		"1\0",
 		"C\0",

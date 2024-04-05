@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 19:13:33 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/04/03 11:04:01 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/04/05 14:07:14 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,15 @@
 
 const char	*get_error_string(t_error error)
 {
-	const char	*error_strings[7] = {
+	const char	*error_strings[8] = {
 		"Malloc error.\0",
 		"Malloc overflow.\0",
 		"Args count is no equal to 2.\0",
 		"Arg don't have .ber extension or dont have a valid path.\0",
 		"Map is not valid.\0",
 		"Map line len is not equal to the first line len.\0",
-		"Unknow map symbol.\0"
+		"Unknow map symbol.\0",
+		"There is missing symbols (start, exit or collectible).\0",
 	};
 	const char	*error_string;
 

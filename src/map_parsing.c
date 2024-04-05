@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 09:25:44 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/04/03 11:17:30 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/04/05 14:22:19 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,13 @@ void	read_map(char *filepath, t_map **map)
 
 void	check_map_validity(t_map *map)
 {
+	t_map	*tmp;
+
+	tmp = NULL;
 	if (!is_wall_valid(map))
 		ft_error(NO_VALID_MAP);
+	else if (is_char_missing(map, tmp))
+		ft_error(MISSING_SYMBOL);
 }
 
 t_map	*map_parsing(char *filename)

@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/25 14:39:28 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/04/03 11:17:56 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/04/05 14:20:53 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ typedef enum {
 	NO_VALID_MAP,
 	NO_VALID_MAP_LINE_LEN,
 	UNKNOW_MAP_SYMBOL,
+	MISSING_SYMBOL,
 } t_error;
 
 typedef enum {
@@ -54,6 +55,13 @@ typedef struct s_map
 	struct s_map	*below;
 } t_map;
 
+typedef struct s_check_symbols
+{
+	int		is_exit_exist;
+	int		is_start_exist;
+	int		is_collectible_exist;
+} t_check_symbols;
+
 //#define malloc(size) ft_malloc(size, 1)
 
 ssize_t str_ptr_len(char **str);
@@ -65,6 +73,7 @@ char	*ft_strjoin_enhanced(char *s1, char *s2);
 char	*get_full_path(char *filename);
 int		is_valid_symbol(char symbol[2]);
 int		is_wall_valid(t_map *map);
+int		is_char_missing(t_map *map, t_map *tmp);
 
 t_map	*map_parsing(char *filename);
 t_map	*map_new(char slot[2]);
