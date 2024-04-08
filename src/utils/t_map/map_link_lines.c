@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 09:09:07 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/04/03 10:27:11 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/04/08 10:12:10 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,12 @@
 
 void	map_link_lines(t_map *first_line, t_map *second_line)
 {
+	if (!first_line && !second_line)
+		return ;
+	else if (!first_line)
+		first_line = second_line->upper;
+	else if (!second_line)
+		second_line = first_line->below;
 	while (first_line && second_line)
 	{
 		map_add_below(&first_line, second_line);

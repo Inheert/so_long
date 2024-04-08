@@ -6,7 +6,7 @@
 #    By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/25 14:27:18 by tclaereb          #+#    #+#              #
-#    Updated: 2024/04/03 11:09:20 by tclaereb         ###   ########.fr        #
+#    Updated: 2024/04/08 08:51:39 by tclaereb         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,6 +18,7 @@ _SRCS = main.c \
 		utils/ft_malloc.c \
 		utils/garbage_collector.c \
 		utils/short_utils.c \
+		utils/short_utils2.c \
 		utils/t_map/map_new.c \
 		utils/t_map/map_add_below.c \
 		utils/t_map/map_add_right.c \

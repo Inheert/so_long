@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/25 14:39:28 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/04/05 14:20:53 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/04/08 09:39:28 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ typedef enum {
 	NO_VALID_MAP_LINE_LEN,
 	UNKNOW_MAP_SYMBOL,
 	MISSING_SYMBOL,
+	NO_VALID_PATH,
 } t_error;
 
 typedef enum {
@@ -74,9 +75,12 @@ char	*get_full_path(char *filename);
 int		is_valid_symbol(char symbol[2]);
 int		is_wall_valid(t_map *map);
 int		is_char_missing(t_map *map, t_map *tmp);
+int		is_valid_path_exist(t_map *map);
 
 t_map	*map_parsing(char *filename);
 t_map	*map_new(char slot[2]);
+t_map	*copy_map(t_map *map);
+t_map	*get_start_pos(t_map *map);
 
 void	map_add_right(t_map **map, t_map *new);
 void	map_add_below(t_map **map, t_map *new);

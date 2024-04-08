@@ -6,11 +6,40 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 11:08:59 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/04/05 14:22:20 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/04/08 10:20:01 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/so_long.h"
+
+
+void	recursive_path_checker(t_map *map, int *is_path_valid)
+{
+	if (!map || *is_path_valid || map->slot[0] == '1')
+		return ;
+	else if (map->slot[0] == 'E')
+	{
+		*is_path_valid = 1;
+		return ;
+	}
+	map->slot[0] = '1';
+	recursive_path_checker(map->left, is_path_valid);
+	recursive_path_checker(map->right, is_path_valid);
+	recursive_path_checker(map->upper, is_path_valid);
+	recursive_path_checker(map->below, is_path_valid);
+}
+
+int	is_valid_path_exist(t_map *map)
+{
+	t_map	*start_pos;
+	int		is_path_valid;
+
+
+	start_pos = get_start_pos(map);
+	is_path_valid = 0;
+	recursive_path_checker(start_pos, &is_path_valid);
+	return (is_path_valid);
+}
 
 int	is_char_missing(t_map *map, t_map *tmp)
 {
