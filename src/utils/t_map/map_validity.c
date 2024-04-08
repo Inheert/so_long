@@ -6,12 +6,11 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 11:08:59 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/04/08 10:20:01 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/04/08 10:39:01 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/so_long.h"
-
 
 void	recursive_path_checker(t_map *map, int *is_path_valid)
 {
@@ -33,7 +32,6 @@ int	is_valid_path_exist(t_map *map)
 {
 	t_map	*start_pos;
 	int		is_path_valid;
-
 
 	start_pos = get_start_pos(map);
 	is_path_valid = 0;
@@ -70,6 +68,23 @@ int	is_char_missing(t_map *map, t_map *tmp)
 	return (0);
 }
 
+int	is_wall_valid_horizontal(t_map *tmp)
+{
+	while (tmp->left)
+	{
+		if (tmp->slot[0] != '1')
+			return (0);
+		tmp = tmp->left;
+	}
+	while (tmp->upper)
+	{
+		if (tmp->slot[0] != '1')
+			return (0);
+		tmp = tmp->upper;
+	}
+	return (1);
+}
+
 int	is_wall_valid(t_map *map)
 {
 	t_map	*tmp;
@@ -89,17 +104,5 @@ int	is_wall_valid(t_map *map)
 			return (0);
 		tmp = tmp->below;
 	}
-	while (tmp->left)
-	{
-		if (tmp->slot[0] != '1')
-			return (0);
-		tmp = tmp->left;
-	}
-	while (tmp->upper)
-	{
-		if (tmp->slot[0] != '1')
-			return (0);
-		tmp = tmp->upper;
-	}
-	return (1);
+	return (is_wall_valid_horizontal(tmp));
 }

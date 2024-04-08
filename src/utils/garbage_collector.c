@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 07:56:02 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/04/02 08:34:08 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/04/08 10:34:29 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,12 +67,12 @@ void	clear_garbage(t_garbage **garbage)
 
 void	delete_garbage(t_garbage **garbage, void *ptr)
 {
-    t_garbage	*tmp;
-    t_garbage	*prev;
+	t_garbage	*tmp;
+	t_garbage	*prev;
 
 	tmp = *garbage;
 	prev = NULL;
-    while (tmp)
+	while (tmp)
 	{
 		if (tmp->content == ptr)
 		{
@@ -82,7 +82,7 @@ void	delete_garbage(t_garbage **garbage, void *ptr)
 				*garbage = tmp->next;
 			free(tmp->content);
 			free(tmp);
-			return;
+			return ;
 		}
 		prev = tmp;
 		tmp = tmp->next;

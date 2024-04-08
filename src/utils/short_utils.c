@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 09:11:56 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/04/05 14:01:16 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/04/08 10:34:56 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,13 +51,12 @@ char	*ft_strjoin_enhanced(char *s1, char *s2)
 	return (s);
 }
 
-ssize_t str_ptr_len(char **str)
+ssize_t	str_ptr_len(char **str)
 {
 	ssize_t	len;
 
 	if (!str)
 		return (0);
-
 	len = 0;
 	while (*str)
 	{
@@ -76,7 +75,7 @@ int	is_valid_symbol(char symbol[2])
 		"E\0",
 		"P\0"
 	};
-	int	i;
+	int			i;
 
 	i = 0;
 	while (i < 5)

@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 10:32:37 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/04/08 10:15:45 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/04/08 10:36:38 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@ void	display_map(t_map *map, int display_link)
 		while (tmp)
 		{
 			if (display_link)
-				ft_printf("%s,%s,%s,%s,%s  ", tmp->slot, tmp->left, tmp->right->slot, tmp->upper, tmp->below);
+				ft_printf("%s,%s,%s,%s,%s  ", tmp->slot, tmp->left,
+					tmp->right->slot, tmp->upper, tmp->below);
 			else
 				ft_printf("%s ", tmp->slot);
 			tmp = tmp->right;
