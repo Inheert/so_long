@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 09:11:56 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/04/08 10:34:56 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/04/10 06:45:35 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,12 @@ void	check_args(int argc, char **argv)
 	int	fd;
 
 	if (argc != 2)
-		ft_error(NO_VALID_ARGS_COUNT);
+		raise_error(NO_VALID_ARGS_COUNT);
 	else if (!ft_strnstr(argv[1], ".ber", ft_strlen(argv[1])))
-		ft_error(NO_VALID_ARG);
+		raise_error(NO_VALID_ARG);
 	fd = open(get_full_path(argv[1]), O_RDONLY);
 	if (fd < 0)
-		ft_error(NO_VALID_ARG);
+		raise_error(NO_VALID_ARG);
 }
 
 char	*ft_strjoin_enhanced(char *s1, char *s2)
@@ -66,23 +66,9 @@ ssize_t	str_ptr_len(char **str)
 	return (len);
 }
 
-int	is_valid_symbol(char symbol[2])
+void	raise_error(char *error)
 {
-	const char	*symbols[5] = {
-		"0\0",
-		"1\0",
-		"C\0",
-		"E\0",
-		"P\0"
-	};
-	int			i;
-
-	i = 0;
-	while (i < 5)
-	{
-		if (ft_strncmp(symbols[i], symbol, 2) == 0)
-			return (1);
-		i++;
-	}
-	return (0);
+	garbage_collector(CLEAR, NULL);
+	ft_printf("Error: %s\n", error);
+	exit(1);
 }

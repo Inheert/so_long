@@ -6,11 +6,32 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 08:50:40 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/04/08 10:19:01 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/04/10 06:45:42 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/so_long.h"
+
+int	is_valid_symbol(char symbol[2])
+{
+	const char	*symbols[5] = {
+		"0\0",
+		"1\0",
+		"C\0",
+		"E\0",
+		"P\0"
+	};
+	int			i;
+
+	i = 0;
+	while (i < 5)
+	{
+		if (ft_strncmp(symbols[i], symbol, 2) == 0)
+			return (1);
+		i++;
+	}
+	return (0);
+}
 
 t_map	*get_start_pos(t_map *map)
 {

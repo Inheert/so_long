@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 09:25:44 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/04/08 10:19:10 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/04/10 06:42:24 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,11 @@ void	add_slots_to_map(t_map **map, char *line)
 	new_line = NULL;
 	splited_line = ft_split(line, ' ');
 	if (!splited_line)
-		ft_error(MALLOC_ERROR);
+		raise_error(MALLOC_ERROR);
 	if (line_len == -1)
 		line_len = str_ptr_len(splited_line);
 	else if (line_len != str_ptr_len(splited_line))
-		ft_error(NO_VALID_MAP_LINE_LEN);
+		raise_error(NO_VALID_MAP_LINE_LEN);
 	while (*splited_line)
 	{
 		map_add_right(&new_line, map_new(*splited_line));
@@ -47,10 +47,10 @@ void	read_map(char *filepath, t_map **map)
 
 	fd = open(filepath, O_RDONLY);
 	if (fd < 0)
-		ft_error(NO_VALID_ARG);
+		raise_error(NO_VALID_ARG);
 	line = get_next_line(fd);
 	if (!line)
-		ft_error(NO_VALID_MAP);
+		raise_error(NO_VALID_MAP);
 	while (line)
 	{
 		garbage_collector(ADD, line);
@@ -66,13 +66,12 @@ void	check_map_validity(t_map *map)
 
 	tmp = NULL;
 	if (!is_wall_valid(map))
-		ft_error(NO_VALID_MAP);
+		raise_error(NO_VALID_MAP);
 	else if (is_char_missing(map, tmp))
-		ft_error(MISSING_SYMBOL);
+		raise_error(MISSING_SYMBOL);
 	tmp = copy_map(map);
-	display_map(tmp, 1);
 	if (!is_valid_path_exist(tmp))
-		ft_error(NO_VALID_PATH);
+		raise_error(NO_VALID_PATH);
 }
 
 t_map	*map_parsing(char *filename)
@@ -83,7 +82,6 @@ t_map	*map_parsing(char *filename)
 	map = NULL;
 	filepath = get_full_path(filename);
 	read_map(filepath, &map);
-	//display_map(map, 0);
 	check_map_validity(map);
 	return (map);
 }

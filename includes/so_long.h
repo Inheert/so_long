@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/25 14:39:28 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/04/08 09:39:28 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/04/10 06:41:57 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,17 +16,16 @@
 # include <fcntl.h>
 # include "../libft/libft.h"
 
-typedef enum {
-	MALLOC_ERROR,
-	MALLOC_OVEFLOW,
-	NO_VALID_ARGS_COUNT,
-	NO_VALID_ARG,
-	NO_VALID_MAP,
-	NO_VALID_MAP_LINE_LEN,
-	UNKNOW_MAP_SYMBOL,
-	MISSING_SYMBOL,
-	NO_VALID_PATH,
-} t_error;
+# define MALLOC_ERROR "Malloc error.\n\0"
+# define MALLOC_OVEFLOW "Malloc overflow.\n\0"
+# define NO_VALID_ARGS_COUNT "Args count is no equal to 2.\n\0"
+# define NO_VALID_ARG "Arg don't have .ber extension or dont have a valid path.\n\0"
+# define NO_VALID_MAP "Map is not valid.\n\0"
+# define NO_VALID_MAP_LINE_LEN "Map line len is not equal to the first line len.\n\0"
+# define UNKNOW_MAP_SYMBOL "Unknow map symbol.\n\0"
+# define MISSING_SYMBOL "There is missing symbols (start, exit or collectible).\n\0"
+# define NO_VALID_PATH "Map have no valid path.\n\0"
+# define MLX_ERROR "A problem has occured when using MLX.\n\0"
 
 typedef enum {
 	ADD,
@@ -67,7 +66,7 @@ typedef struct s_check_symbols
 
 ssize_t str_ptr_len(char **str);
 void	*ft_malloc(size_t size, size_t nmemb);
-void	ft_error(t_error error);
+void	raise_error(char *error);
 void	garbage_collector(t_garbage_action action, void *ptr);
 void	check_args(int argc, char **argv);
 char	*ft_strjoin_enhanced(char *s1, char *s2);

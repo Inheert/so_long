@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/04 17:10:19 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/04/02 10:26:43 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/04/10 06:42:56 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ char	**ft_split(char const *s, char c)
 		return (NULL);
 	garbage_collector(ADD, result);
 	if (!fill_result(result, s, c))
-		ft_error(MALLOC_ERROR);
+		raise_error(MALLOC_ERROR);
 	result[count] = NULL;
 	return (result);
 }
