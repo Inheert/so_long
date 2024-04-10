@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/25 14:39:28 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/04/10 06:41:57 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/04/10 09:52:52 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include <fcntl.h>
 # include "../libft/libft.h"
+# include "../MLX42/include/MLX42/MLX42.h"
 
 # define MALLOC_ERROR "Malloc error.\n\0"
 # define MALLOC_OVEFLOW "Malloc overflow.\n\0"
@@ -26,6 +27,12 @@
 # define MISSING_SYMBOL "There is missing symbols (start, exit or collectible).\n\0"
 # define NO_VALID_PATH "Map have no valid path.\n\0"
 # define MLX_ERROR "A problem has occured when using MLX.\n\0"
+# define MLX_IMG_ERROR "A problem has occured when using MLX image.\n\0"
+# define MLX_TEXTURE_ERROR "A problem has occured when using MLX texture.\n\0"
+
+# define MLX_WIN_WIDTH 800
+# define MLX_WIN_HEIGHT 600
+# define MLX_IMG_WIDTH 256
 
 typedef enum {
 	ADD,
@@ -53,6 +60,9 @@ typedef struct s_map
 	struct s_map	*right;
 	struct s_map	*upper;
 	struct s_map	*below;
+	mlx_image_t		*img;
+	int				x;
+	int				y;
 } t_map;
 
 typedef struct s_check_symbols
@@ -84,6 +94,9 @@ t_map	*get_start_pos(t_map *map);
 void	map_add_right(t_map **map, t_map *new);
 void	map_add_below(t_map **map, t_map *new);
 void	map_link_lines(t_map *first_line, t_map *second_line);
+void	apply_func_on_map(t_map *map, void (*f)(t_map *map, mlx_t *mlx));
 void	display_map(t_map *map, int display_link);
+
+void	start_mlx(t_map *map);
 
 #endif

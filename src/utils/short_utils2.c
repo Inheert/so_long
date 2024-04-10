@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 08:50:40 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/04/10 06:45:42 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/04/10 10:17:29 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	is_valid_symbol(char symbol[2])
 	i = 0;
 	while (i < 5)
 	{
-		if (ft_strncmp(symbols[i], symbol, 2) == 0)
+		if (ft_strncmp(symbols[i], symbol, 1) == 0)
 			return (1);
 		i++;
 	}
@@ -98,4 +98,20 @@ t_map	*copy_map(t_map *map)
 	}
 	link_copy(new_map);
 	return (new_map);
+}
+
+void	apply_func_on_map(t_map *map, void (*f)(t_map *map, mlx_t *mlx))
+{
+	t_map	*tmp;
+
+	while (map)
+	{
+		tmp = map;
+		while (tmp)
+		{
+			f(tmp, NULL);
+			tmp = tmp->right;
+		}
+		map = map->below;
+	}
 }

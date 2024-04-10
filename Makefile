@@ -6,24 +6,25 @@
 #    By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/25 14:27:18 by tclaereb          #+#    #+#              #
-#    Updated: 2024/04/10 06:46:11 by tclaereb         ###   ########.fr        #
+#    Updated: 2024/04/10 07:11:35 by tclaereb         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME_P = so_long
 
 _SRCS = main.c \
-		map_parsing.c \
 		utils/ft_malloc.c \
 		utils/garbage_collector.c \
 		utils/short_utils.c \
 		utils/short_utils2.c \
+		utils/t_map/map_parsing.c \
 		utils/t_map/map_new.c \
 		utils/t_map/map_add_below.c \
 		utils/t_map/map_add_right.c \
 		utils/t_map/map_link_lines.c \
 		utils/t_map/map_validity.c \
 		utils/t_map/map_display.c \
+		mlx/mlx_init.c \
 
 SRCS_DIR = src
 
