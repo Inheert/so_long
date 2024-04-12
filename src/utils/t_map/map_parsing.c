@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 09:25:44 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/04/10 06:42:24 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/04/12 16:04:55 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,14 +74,22 @@ void	check_map_validity(t_map *map)
 		raise_error(NO_VALID_PATH);
 }
 
-t_map	*map_parsing(char *filename)
+t_map_info	*map_parsing(char *filename)
 {
 	char	*filepath;
+	int		*map_len;
+	t_map_info	*map_info;
 	t_map	*map;
 
 	map = NULL;
 	filepath = get_full_path(filename);
 	read_map(filepath, &map);
 	check_map_validity(map);
-	return (map);
+	map_len = get_map_len(map);
+	map_info = ft_malloc(sizeof(t_map_info), 1);
+	map_info->map_width = map_len[0];
+	map_info->map_height = map_len[1];
+	garbage_collector(DELETE, map_len);
+	map_info->map = map;
+	return (map_info);
 }

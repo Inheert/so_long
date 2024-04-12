@@ -6,12 +6,12 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/25 14:39:28 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/04/10 09:52:52 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/04/12 16:31:10 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FDF_H
-# define FDF_H
+#ifndef SO_LONG_H
+# define SO_LONG_H
 
 # include <fcntl.h>
 # include "../libft/libft.h"
@@ -30,9 +30,9 @@
 # define MLX_IMG_ERROR "A problem has occured when using MLX image.\n\0"
 # define MLX_TEXTURE_ERROR "A problem has occured when using MLX texture.\n\0"
 
-# define MLX_WIN_WIDTH 800
-# define MLX_WIN_HEIGHT 600
-# define MLX_IMG_WIDTH 256
+# define MLX_WIN_WIDTH 3840
+# define MLX_WIN_HEIGHT 2100
+# define MLX_IMG_WIDTH 150
 
 typedef enum {
 	ADD,
@@ -65,6 +65,13 @@ typedef struct s_map
 	int				y;
 } t_map;
 
+typedef struct s_map_info
+{
+	t_map	*map;
+	int		map_width;
+	int		map_height;
+} t_map_info;
+
 typedef struct s_check_symbols
 {
 	int		is_exit_exist;
@@ -74,29 +81,31 @@ typedef struct s_check_symbols
 
 //#define malloc(size) ft_malloc(size, 1)
 
-ssize_t str_ptr_len(char **str);
-void	*ft_malloc(size_t size, size_t nmemb);
-void	raise_error(char *error);
-void	garbage_collector(t_garbage_action action, void *ptr);
-void	check_args(int argc, char **argv);
-char	*ft_strjoin_enhanced(char *s1, char *s2);
-char	*get_full_path(char *filename);
-int		is_valid_symbol(char symbol[2]);
-int		is_wall_valid(t_map *map);
-int		is_char_missing(t_map *map, t_map *tmp);
-int		is_valid_path_exist(t_map *map);
+ssize_t 	str_ptr_len(char **str);
+void		*ft_malloc(size_t size, size_t nmemb);
+void		raise_error(char *error);
+void		garbage_collector(t_garbage_action action, void *ptr);
+void		check_args(int argc, char **argv);
+char		*ft_strjoin_enhanced(char *s1, char *s2);
+char		*get_full_path(char *filename);
+int			is_valid_symbol(char symbol[2]);
+int			is_wall_valid(t_map *map);
+int			is_char_missing(t_map *map, t_map *tmp);
+int			is_valid_path_exist(t_map *map);
 
-t_map	*map_parsing(char *filename);
-t_map	*map_new(char slot[2]);
-t_map	*copy_map(t_map *map);
-t_map	*get_start_pos(t_map *map);
+t_map_info	*map_parsing(char *filename);
+t_map		*map_new(char slot[2]);
+t_map		*copy_map(t_map *map);
+t_map		*get_start_pos(t_map *map);
 
-void	map_add_right(t_map **map, t_map *new);
-void	map_add_below(t_map **map, t_map *new);
-void	map_link_lines(t_map *first_line, t_map *second_line);
-void	apply_func_on_map(t_map *map, void (*f)(t_map *map, mlx_t *mlx));
-void	display_map(t_map *map, int display_link);
+int 		*get_map_len(t_map *map);
 
-void	start_mlx(t_map *map);
+void		map_add_right(t_map **map, t_map *new);
+void		map_add_below(t_map **map, t_map *new);
+void		map_link_lines(t_map *first_line, t_map *second_line);
+void		apply_func_on_map(t_map *map, void (*f)(t_map *map, mlx_t *mlx, int width, int height));
+void		display_map(t_map *map, int display_link);
+
+void		start_mlx(t_map_info *map_info);
 
 #endif

@@ -1,24 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   map_len.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/29 18:53:22 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/04/12 16:05:09 by tclaereb         ###   ########.fr       */
+/*   Created: 2024/04/12 15:56:04 by tclaereb          #+#    #+#             */
+/*   Updated: 2024/04/12 16:24:32 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/so_long.h"
+#include "../../../includes/so_long.h"
 
-int	main(int argc, char **argv)
+int *get_map_len(t_map *map)
 {
-	t_map_info	*map_info;
+	int		*map_len;
+	t_map	*tmp;
 
-	check_args(argc, argv);
-	map_info = map_parsing(argv[1]);
-	start_mlx(map_info);
-	garbage_collector(CLEAR, NULL);
-	return (0);
+	map_len = ft_malloc(sizeof(int), 2);
+	tmp = map;
+	while (tmp)
+	{
+		map_len[0]++;
+		tmp = tmp->right;
+	}
+	tmp = map;
+	while (tmp)
+	{
+		map_len[1]++;
+		tmp = tmp->below;
+	}
+	return (map_len);
 }

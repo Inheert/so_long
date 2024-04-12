@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 08:50:40 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/04/10 10:17:29 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/04/12 16:16:00 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,8 @@ t_map	*copy_map(t_map *map)
 	return (new_map);
 }
 
-void	apply_func_on_map(t_map *map, void (*f)(t_map *map, mlx_t *mlx))
+void	apply_func_on_map(t_map *map, void (*f)(t_map *map,
+						mlx_t *mlx, int width, int height))
 {
 	t_map	*tmp;
 
@@ -109,7 +110,7 @@ void	apply_func_on_map(t_map *map, void (*f)(t_map *map, mlx_t *mlx))
 		tmp = map;
 		while (tmp)
 		{
-			f(tmp, NULL);
+			f(tmp, NULL, 0, 0);
 			tmp = tmp->right;
 		}
 		map = map->below;

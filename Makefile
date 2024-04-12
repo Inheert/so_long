@@ -6,7 +6,7 @@
 #    By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/25 14:27:18 by tclaereb          #+#    #+#              #
-#    Updated: 2024/04/10 07:11:35 by tclaereb         ###   ########.fr        #
+#    Updated: 2024/04/12 15:58:17 by tclaereb         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,6 +21,7 @@ _SRCS = main.c \
 		utils/t_map/map_new.c \
 		utils/t_map/map_add_below.c \
 		utils/t_map/map_add_right.c \
+		utils/t_map/map_len.c \
 		utils/t_map/map_link_lines.c \
 		utils/t_map/map_validity.c \
 		utils/t_map/map_display.c \
