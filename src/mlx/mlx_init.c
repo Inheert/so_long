@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 07:11:07 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/04/12 16:29:01 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/04/16 17:04:12 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ mlx_image_t	*create_img(t_map *map, mlx_t *mlx, int width, int height)
 {
 	mlx_image_t		*img;
 	mlx_texture_t	*texture;
-	ft_printf("%d %d\n", width, height);
 	if (map->slot[0] == '1')
 		texture = mlx_load_png("./src/maps/textures/decor/256Tiles Square02Grass.png");
 	else
@@ -59,6 +58,8 @@ void	set_img(t_map *map, mlx_t *mlx, int width, int height)
 	else
 		img->instances[0].y = map->upper->img->instances[0].y + MLX_WIN_HEIGHT / map_height;
 	map->img = img;
+	map->x = img->instances[0].x;
+	map->y = img->instances[0].y;
 }
 
 void	_mlx_create_map(mlx_t *mlx, t_map_info *map_info)
@@ -75,7 +76,26 @@ void	start_mlx(t_map_info *map_info)
 	mlx = mlx_init(MLX_WIN_WIDTH, MLX_WIN_HEIGHT, "so_long", true);
 	if (!mlx)
 		raise_error(MLX_ERROR);
+	close_mlx(mlx);
 	_mlx_create_map(mlx, map_info);
+	init_mlx_hooks(mlx);
+	init_player(map_info->map);
 	mlx_loop(mlx);
 	mlx_terminate(mlx);
+}
+
+void	close_mlx(mlx_t *mlx)
+{
+	static mlx_t	*smlx = NULL;
+
+	if (!smlx && mlx)
+	{
+		smlx = mlx;
+		return ;
+	}
+	if (!smlx)
+		return ;
+	mlx_close_window(smlx);
+	garbage_collector(CLEAR, NULL);
+	exit(0);
 }

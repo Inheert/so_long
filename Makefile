@@ -6,7 +6,7 @@
 #    By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/25 14:27:18 by tclaereb          #+#    #+#              #
-#    Updated: 2024/04/12 15:58:17 by tclaereb         ###   ########.fr        #
+#    Updated: 2024/04/16 16:29:48 by tclaereb         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,6 +26,10 @@ _SRCS = main.c \
 		utils/t_map/map_validity.c \
 		utils/t_map/map_display.c \
 		mlx/mlx_init.c \
+		mlx/mlx_init_hooks.c \
+		mlx/hooks/mlx_inputs.c \
+		mlx/player/mlx_player.c \
+		mlx/player/utils.c \
 
 SRCS_DIR = src
 

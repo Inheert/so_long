@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/25 14:39:28 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/04/12 16:31:10 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/04/16 17:05:05 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,10 @@
 # define MLX_ERROR "A problem has occured when using MLX.\n\0"
 # define MLX_IMG_ERROR "A problem has occured when using MLX image.\n\0"
 # define MLX_TEXTURE_ERROR "A problem has occured when using MLX texture.\n\0"
+# define PLAYER_CREATION_ERROR "A problem has occured when creating player.\n\0"
 
-# define MLX_WIN_WIDTH 3840
+
+# define MLX_WIN_WIDTH 3860
 # define MLX_WIN_HEIGHT 2100
 # define MLX_IMG_WIDTH 150
 
@@ -53,6 +55,13 @@ typedef struct s_garbage
 	struct s_garbage	*next;
 }	t_garbage;
 
+typedef struct s_check_symbols
+{
+	int		is_exit_exist;
+	int		is_start_exist;
+	int		is_collectible_exist;
+} t_check_symbols;
+
 typedef struct s_map
 {
 	char			slot[2];
@@ -72,12 +81,11 @@ typedef struct s_map_info
 	int		map_height;
 } t_map_info;
 
-typedef struct s_check_symbols
+typedef struct s_player
 {
-	int		is_exit_exist;
-	int		is_start_exist;
-	int		is_collectible_exist;
-} t_check_symbols;
+	t_map		*pos;
+	mlx_image_t	*img;
+} t_player;
 
 //#define malloc(size) ft_malloc(size, 1)
 
@@ -107,5 +115,11 @@ void		apply_func_on_map(t_map *map, void (*f)(t_map *map, mlx_t *mlx, int width,
 void		display_map(t_map *map, int display_link);
 
 void		start_mlx(t_map_info *map_info);
+void		close_mlx(mlx_t *mlx);
+void		init_mlx_hooks(mlx_t *mlx);
+void		ft_key_hook(mlx_key_data_t keydata, void* param);
+
+void		init_player(t_map *map);
+t_map		*find_player_pos(t_map *map);
 
 #endif
