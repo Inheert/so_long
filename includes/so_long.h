@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/25 14:39:28 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/04/16 17:05:05 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/04/17 16:40:06 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,27 +14,31 @@
 # define SO_LONG_H
 
 # include <fcntl.h>
+# include <stdio.h>
 # include "../libft/libft.h"
 # include "../MLX42/include/MLX42/MLX42.h"
 
 # define MALLOC_ERROR "Malloc error.\n\0"
 # define MALLOC_OVEFLOW "Malloc overflow.\n\0"
 # define NO_VALID_ARGS_COUNT "Args count is no equal to 2.\n\0"
-# define NO_VALID_ARG "Arg don't have .ber extension or dont have a valid path.\n\0"
+# define NO_VALID_ARG "Arg don't have .ber extension or dont have a valid path"
 # define NO_VALID_MAP "Map is not valid.\n\0"
-# define NO_VALID_MAP_LINE_LEN "Map line len is not equal to the first line len.\n\0"
+# define NO_VALID_MAP_LINE_LEN "Map line len is not equal to the first line len"
 # define UNKNOW_MAP_SYMBOL "Unknow map symbol.\n\0"
-# define MISSING_SYMBOL "There is missing symbols (start, exit or collectible).\n\0"
+# define MISSING_SYMBOL "There is missing symbols (start, exit or collectible)."
 # define NO_VALID_PATH "Map have no valid path.\n\0"
 # define MLX_ERROR "A problem has occured when using MLX.\n\0"
 # define MLX_IMG_ERROR "A problem has occured when using MLX image.\n\0"
 # define MLX_TEXTURE_ERROR "A problem has occured when using MLX texture.\n\0"
 # define PLAYER_CREATION_ERROR "A problem has occured when creating player.\n\0"
 
-
 # define MLX_WIN_WIDTH 3860
 # define MLX_WIN_HEIGHT 2100
 # define MLX_IMG_WIDTH 150
+
+# define PLAYER_SIZE_DIV 10
+# define HITBOX_SIZE_DIV 15
+# define PLAYER_SPEED 10
 
 typedef enum {
 	ADD,
@@ -62,6 +66,15 @@ typedef struct s_check_symbols
 	int		is_collectible_exist;
 } t_check_symbols;
 
+typedef struct s_collision
+{
+	int32_t		x_1;
+	int32_t		y_1;
+	int32_t		x_2;
+	int32_t		y_2;
+	mlx_image_t		*img;
+} t_collision;
+
 typedef struct s_map
 {
 	char			slot[2];
@@ -70,8 +83,8 @@ typedef struct s_map
 	struct s_map	*upper;
 	struct s_map	*below;
 	mlx_image_t		*img;
-	int				x;
-	int				y;
+	int32_t			x;
+	int32_t			y;
 } t_map;
 
 typedef struct s_map_info
@@ -83,8 +96,10 @@ typedef struct s_map_info
 
 typedef struct s_player
 {
+	mlx_t		*mlx;
 	t_map		*pos;
 	mlx_image_t	*img;
+	t_collision	*collision;
 } t_player;
 
 //#define malloc(size) ft_malloc(size, 1)
@@ -119,7 +134,8 @@ void		close_mlx(mlx_t *mlx);
 void		init_mlx_hooks(mlx_t *mlx);
 void		ft_key_hook(mlx_key_data_t keydata, void* param);
 
-void		init_player(t_map *map);
+t_player	*init_player(mlx_t *mlx, t_map *map);
 t_map		*find_player_pos(t_map *map);
+void		player_movement(void *param);
 
 #endif

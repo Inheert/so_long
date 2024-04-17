@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 07:11:07 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/04/16 17:04:12 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/04/17 17:59:42 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,16 +18,17 @@ mlx_image_t	*create_img(t_map *map, mlx_t *mlx, int width, int height)
 	mlx_image_t		*img;
 	mlx_texture_t	*texture;
 	if (map->slot[0] == '1')
-		texture = mlx_load_png("./src/maps/textures/decor/256Tiles Square02Grass.png");
+		texture = mlx_load_png("./src/textures/decor/256Tiles Square02Grass.png");
 	else
-		texture = mlx_load_png("./src/maps/textures/decor/256_Dirt Pebbles 01.png");
+		texture = mlx_load_png("./src/textures/decor/256_Dirt Pebbles 01.png");
 	if (!texture)
 		return (mlx_close_window(mlx), raise_error(MLX_TEXTURE_ERROR), NULL);
 	img = mlx_texture_to_image(mlx, texture);
-	mlx_resize_image(img, MLX_WIN_WIDTH / width, MLX_WIN_HEIGHT / height);
 	if (!img)
 		return (mlx_close_window(mlx), raise_error(MLX_IMG_ERROR), NULL);
-	if (mlx_image_to_window(mlx, img, 0, 0) == -1)
+	if (!mlx_resize_image(img, MLX_WIN_WIDTH / width, MLX_WIN_HEIGHT / height))
+		return (mlx_close_window(mlx), raise_error(MLX_IMG_ERROR), NULL);
+	if (mlx_image_to_window(mlx, img, 0, 0) == -1	)
 		return (mlx_close_window(mlx), raise_error(MLX_IMG_ERROR), NULL);
 	return (img);
 }
@@ -71,15 +72,15 @@ void	_mlx_create_map(mlx_t *mlx, t_map_info *map_info)
 
 void	start_mlx(t_map_info *map_info)
 {
-	mlx_t	*mlx;
+	mlx_t		*mlx;
 
 	mlx = mlx_init(MLX_WIN_WIDTH, MLX_WIN_HEIGHT, "so_long", true);
 	if (!mlx)
 		raise_error(MLX_ERROR);
 	close_mlx(mlx);
 	_mlx_create_map(mlx, map_info);
+	init_player(mlx, map_info->map);
 	init_mlx_hooks(mlx);
-	init_player(map_info->map);
 	mlx_loop(mlx);
 	mlx_terminate(mlx);
 }

@@ -6,7 +6,7 @@
 #    By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/25 14:27:18 by tclaereb          #+#    #+#              #
-#    Updated: 2024/04/16 16:29:48 by tclaereb         ###   ########.fr        #
+#    Updated: 2024/04/17 12:27:39 by tclaereb         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,6 +30,7 @@ _SRCS = main.c \
 		mlx/hooks/mlx_inputs.c \
 		mlx/player/mlx_player.c \
 		mlx/player/utils.c \
+		mlx/player/moover.c \
 
 SRCS_DIR = src
 
