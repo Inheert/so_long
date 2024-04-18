@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 16:15:54 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/04/17 16:38:14 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/04/18 14:11:17 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ void	create_player_collision(t_player *player)
 	x_pivot = player->pos->x + MLX_WIN_HEIGHT / PLAYER_SIZE_DIV / 2;
 	y_pivot = player->pos->y + MLX_WIN_HEIGHT / PLAYER_SIZE_DIV / 2;
 	collision = ft_malloc(sizeof(t_collision), 1);
+	collision->x_pivot = x_pivot;
+	collision->y_pivot = y_pivot;
 	collision->x_1 = x_pivot - MLX_WIN_HEIGHT / HITBOX_SIZE_DIV / 2;
 	collision->y_1 = y_pivot - MLX_WIN_HEIGHT / HITBOX_SIZE_DIV / 2;
 	texture = mlx_load_png("./src/textures/hitboxview.png");
@@ -34,7 +36,18 @@ void	create_player_collision(t_player *player)
 		return (mlx_close_window(player->mlx), raise_error(MLX_IMG_ERROR));
 	if (mlx_image_to_window(player->mlx, collision->img, collision->x_1, collision->y_1) == -1)
 		return (mlx_close_window(player->mlx), raise_error(MLX_IMG_ERROR));
+	collision->img->enabled = SHOW_COLLISION_BOX;
 	player->collision = collision;
+}
+
+void	initialize_player_components(mlx_t *mlx, t_player *player)
+{
+	create_player_collision(player);
+	mlx_loop_hook(mlx, &player_movement, player);
+	mlx_cursor_hook(mlx, &player_aiming, player);
+	mlx_loop_hook(mlx, &player_animation, player);
+	player->idle_sprites = create_animation_chain(player, S_HANDGUN_IDLE_PATH, S_HANDGUN_IDLE_COUNT);
+	player->walking_sprites = create_animation_chain(player, S_HANDGUN_WALK_PATH, S_HANDGUN_WALK_COUNT);
 }
 
 t_player	*init_player(mlx_t *mlx, t_map *map)
@@ -59,7 +72,7 @@ t_player	*init_player(mlx_t *mlx, t_map *map)
 		return (mlx_close_window(mlx), raise_error(MLX_IMG_ERROR), NULL);
 	if (mlx_image_to_window(mlx, player->img, pos->x, pos->y))
 		return (raise_error(MLX_IMG_ERROR), close_mlx(NULL), NULL);
-	create_player_collision(player);
-	mlx_loop_hook(mlx, &player_movement, player);
+	player->img->enabled = false;
+	initialize_player_components(mlx, player);
 	return (player);
 }
