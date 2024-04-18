@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 16:15:54 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/04/18 14:11:17 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/04/18 15:04:21 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ void	initialize_player_components(mlx_t *mlx, t_player *player)
 	mlx_loop_hook(mlx, &player_animation, player);
 	player->idle_sprites = create_animation_chain(player, S_HANDGUN_IDLE_PATH, S_HANDGUN_IDLE_COUNT);
 	player->walking_sprites = create_animation_chain(player, S_HANDGUN_WALK_PATH, S_HANDGUN_WALK_COUNT);
+	player->shoot_sprites = create_animation_chain(player, S_HANDGUN_SHOOT_PATH, S_HANDGUN_SHOOT_COUNT);
 }
 
 t_player	*init_player(mlx_t *mlx, t_map *map)

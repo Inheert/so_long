@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/25 14:39:28 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/04/18 14:23:13 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/04/18 15:06:09 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,8 @@
 # define S_HANDGUN_IDLE_COUNT 19
 # define S_HANDGUN_WALK_PATH "./src/textures/player/handgun/move/survivor-move_handgun_"
 # define S_HANDGUN_WALK_COUNT 19
+# define S_HANDGUN_SHOOT_PATH "./src/textures/player/handgun/shoot/survivor-shoot_handgun_"
+# define S_HANDGUN_SHOOT_COUNT 2
 typedef enum {
 	ADD,
 	DELETE,

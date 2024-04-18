@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 12:23:45 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/04/18 14:19:05 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/04/18 15:14:52 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,12 @@ void	move_player(t_player *player, int x, int y, bool double_input)
 {
 	int	speed;
 
+	if (!player->is_moving)
+	{
+		player->current_sprites->img->enabled = false;
+		player->current_sprites = player->shoot_sprites;
+	}
+	player->is_moving = true;
 	speed = PLAYER_SPEED;
 	if (speed > 30)
 		speed = 30;
@@ -97,7 +103,6 @@ void	player_movement(void *param)
 		return ;
 	if (!mlx)
 		mlx = player->mlx;
-	player->is_moving = true;
 	if (mlx_is_key_down(mlx, MLX_KEY_W) && mlx_is_key_down(mlx, MLX_KEY_D))
 		return (move_player(player, 1, -1, true));
 	if (mlx_is_key_down(mlx, MLX_KEY_W) && mlx_is_key_down(mlx, MLX_KEY_A))
@@ -114,5 +119,10 @@ void	player_movement(void *param)
 		return (move_player(player, -1, 0, false));
 	if (mlx_is_key_down(mlx, MLX_KEY_D))
 		return (move_player(player, 1, 0, false));
-	player->is_moving = false;
+	if (player->is_moving)
+	{
+		player->current_sprites->img->enabled = false;
+		player->current_sprites = player->idle_sprites;
+		player->is_moving = false;
+	}
 }
