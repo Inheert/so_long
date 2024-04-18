@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 12:23:45 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/04/18 15:14:52 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/04/18 15:20:03 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ void	move_player(t_player *player, int x, int y, bool double_input)
 	if (!player->is_moving)
 	{
 		player->current_sprites->img->enabled = false;
-		player->current_sprites = player->shoot_sprites;
+		player->current_sprites = player->walking_sprites;
 	}
 	player->is_moving = true;
 	speed = PLAYER_SPEED;

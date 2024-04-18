@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/25 14:39:28 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/04/18 15:06:09 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/04/18 15:19:43 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@
 
 # define PLAYER_SIZE_DIV 10
 # define HITBOX_SIZE_DIV 15
-# define PLAYER_SPEED 2
+# define PLAYER_SPEED 25
 
 # define SHOW_COLLISION_BOX 1
 

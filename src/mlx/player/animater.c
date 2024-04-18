@@ -6,11 +6,16 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 13:29:35 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/04/18 15:10:40 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/04/18 15:27:15 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/so_long.h"
+
+void	set_animation()
+{
+	
+}
 
 void	player_animation(void *param)
 {
