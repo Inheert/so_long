@@ -4,7 +4,7 @@
 /*   mlx_inputs.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
+/*                                           d      +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 15:20:14 by tclaereb          #+#    #+#             */
 /*   Updated: 2024/04/16 16:18:58 by tclaereb         ###   ########.fr       */
 /*                                                                            */

@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/25 14:39:28 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/04/18 15:19:43 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/04/23 13:24:37 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,16 +42,21 @@
 
 # define PLAYER_SIZE_DIV 10
 # define HITBOX_SIZE_DIV 15
-# define PLAYER_SPEED 25
+# define SHOW_COLLISION_BOX 0
 
-# define SHOW_COLLISION_BOX 1
-
+# define SPRITES_FRAME_RATE_PER_SEC 0.01
 # define S_HANDGUN_IDLE_PATH "./src/textures/player/handgun/idle/survivor-idle_handgun_"
 # define S_HANDGUN_IDLE_COUNT 19
 # define S_HANDGUN_WALK_PATH "./src/textures/player/handgun/move/survivor-move_handgun_"
 # define S_HANDGUN_WALK_COUNT 19
 # define S_HANDGUN_SHOOT_PATH "./src/textures/player/handgun/shoot/survivor-shoot_handgun_"
 # define S_HANDGUN_SHOOT_COUNT 2
+# define S_HANDGUN_MELEE_PATH "./src/textures/player/handgun/meleeattack/survivor-meleeattack_handgun_"
+# define S_HANDGUN_MELEE_COUNT 14
+
+# define PLAYER_WALK_SPEED 500
+# define PLAYER_RUN_SPEED 900
+
 typedef enum {
 	ADD,
 	DELETE,
@@ -64,6 +69,15 @@ typedef enum {
 	UPPER,
 	BELOW,
 } t_direction;
+
+typedef enum s_sprite_types
+{
+	IDLE,
+	WALK,
+	SHOOT,
+	RELOAD,
+	MELEE,
+} t_sprite_types;
 
 typedef struct s_garbage
 {
@@ -111,6 +125,7 @@ typedef struct s_map_info
 typedef struct s_sprites
 {
 	mlx_image_t				*img;
+	enum s_sprite_types		type;
 	struct s_sprites		*next;
 } t_sprites;
 
@@ -123,13 +138,9 @@ typedef struct s_player
 	t_sprites	*current_sprites;
 	t_sprites	*idle_sprites;
 	t_sprites	*walking_sprites;
-	bool		is_moving;
 	t_sprites	*shoot_sprites;
-	bool		is_shooting;
 	t_sprites	*reload_sprites;
-	bool		is_reloading;
 	t_sprites	*melee_sprites;
-	bool 		is_melee;
 } t_player;
 
 //# define malloc(size) ft_malloc(size, 1)
@@ -166,10 +177,12 @@ void		ft_key_hook(mlx_key_data_t keydata, void* param);
 
 t_player	*init_player(mlx_t *mlx, t_map *map);
 t_map		*find_player_pos(t_map *map);
-t_sprites	*create_animation_chain(t_player *player, char *sprites_path, unsigned char sprites_count);
+t_sprites	*create_animation_chain(t_player *player, char *sprites_path, unsigned char sprites_count, t_sprite_types type);
 
 void		player_movement(void *param);
 void		player_animation(void *param);
 void		player_aiming(double x, double y, void *param);
+void		set_animation(t_player *player, t_sprites *sprites, bool force);
+void		remove_animation(t_player *player, t_sprites *sprites);
 
 #endif
