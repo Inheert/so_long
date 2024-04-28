@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 12:23:45 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/04/23 12:28:20 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/04/28 02:43:01 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,8 @@ bool	predict_player_pos(t_player	*player, int x, int y, int speed)
 void	move_player(t_player *player, int x, int y, bool *input_pressed)
 {
 	int	speed;
+	int	add_x;
+	int	add_y;
 
 	*input_pressed = true;
 	set_animation(player, player->walking_sprites, false);
@@ -80,10 +82,14 @@ void	move_player(t_player *player, int x, int y, bool *input_pressed)
 		speed = PLAYER_WALK_SPEED * player->mlx->delta_time;
 	if (!predict_player_pos(player, x, y, speed))
 		return ;
-	player->collision->img->instances[0].x += x * speed;
-	player->collision->img->instances[0].y += y * speed;
-	player->img->instances[0].x += x * speed;
-	player->img->instances[0].y += y * speed;
+	add_x = x * speed;
+	add_y = y * speed;
+	player->collision->img->instances[0].x += add_x;
+	player->collision->img->instances[0].y += add_y;
+	player->collision->x_pivot += add_x;	
+	player->collision->y_pivot += add_y;
+	player->img->instances[0].x += add_x;
+	player->img->instances[0].y += add_y;
 }
 
 void	player_movement(void *param)

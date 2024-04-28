@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 08:50:40 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/04/12 16:16:00 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/04/28 05:08:26 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,10 @@ t_map	*copy_map(t_map *map)
 
 	new_map = NULL;
 	new_map_tmp = NULL;
+	while (map->upper)
+		map = map->upper;
+	while (map->left)
+		map = map->left;
 	while (map)
 	{
 		if (!new_map)

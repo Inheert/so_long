@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/25 14:39:28 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/04/23 13:24:37 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/04/28 07:30:55 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,10 @@
 
 # include <fcntl.h>
 # include <stdio.h>
+# include <stdlib.h>
+# include <pthread.h>
 # include <math.h>
+# include <time.h>
 # include "../MLX42/include/MLX42/MLX42.h"
 # include "../libft/libft.h"
 
@@ -55,7 +58,17 @@
 # define S_HANDGUN_MELEE_COUNT 14
 
 # define PLAYER_WALK_SPEED 500
-# define PLAYER_RUN_SPEED 900
+# define PLAYER_RUN_SPEED 1500
+
+# define BULLET_TRACE_SLOWNESS 100
+# define BULLET_TRACE_VANISHING_TIME 15000
+# define BULLET_TRACE_COLOR 0x00FFFFFF
+
+# define BULLET_IMPACT_SLOWNESS 500
+# define BULLET_IMPACT_VANISHING_TIME 30000
+# define BULLET_IMPACT_LINE_PER_SIDE 4
+# define BULLET_IMPACT_LINE_SIZE 50
+# define BULLET_IMPACT_COLOR 0x00FFFFFF
 
 typedef enum {
 	ADD,
@@ -135,6 +148,8 @@ typedef struct s_player
 	t_map		*pos;
 	mlx_image_t	*img;
 	t_collision	*collision;
+	double		x_aiming;
+	double		y_aiming;
 	t_sprites	*current_sprites;
 	t_sprites	*idle_sprites;
 	t_sprites	*walking_sprites;
@@ -142,6 +157,23 @@ typedef struct s_player
 	t_sprites	*reload_sprites;
 	t_sprites	*melee_sprites;
 } t_player;
+
+typedef struct s_point
+{
+	int32_t	x;
+	int32_t	y;
+} t_point;
+
+typedef struct s_param {
+		t_player	*player;
+		t_point		start;
+		t_point		end;
+		mlx_image_t	*img;
+		mlx_t		*mlx;
+		int32_t		x;
+		int32_t		y;
+		uint32_t	delay;
+} t_param;
 
 //# define malloc(size) ft_malloc(size, 1)
 
@@ -161,9 +193,7 @@ t_map_info	*map_parsing(char *filename);
 t_map		*map_new(char slot[2]);
 t_map		*copy_map(t_map *map);
 t_map		*get_start_pos(t_map *map);
-
 int 		*get_map_len(t_map *map);
-
 void		map_add_right(t_map **map, t_map *new);
 void		map_add_below(t_map **map, t_map *new);
 void		map_link_lines(t_map *first_line, t_map *second_line);
@@ -177,12 +207,12 @@ void		ft_key_hook(mlx_key_data_t keydata, void* param);
 
 t_player	*init_player(mlx_t *mlx, t_map *map);
 t_map		*find_player_pos(t_map *map);
-t_sprites	*create_animation_chain(t_player *player, char *sprites_path, unsigned char sprites_count, t_sprite_types type);
+t_sprites	*create_animation_chain(t_player *player, bool is_loop, char *sprites_path, unsigned char sprites_count, t_sprite_types type);
 
 void		player_movement(void *param);
 void		player_animation(void *param);
 void		player_aiming(double x, double y, void *param);
 void		set_animation(t_player *player, t_sprites *sprites, bool force);
 void		remove_animation(t_player *player, t_sprites *sprites);
-
+void		on_mouse_action(mouse_key_t button, action_t action, modifier_key_t mods, void* param);
 #endif

@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 13:29:35 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/04/23 13:26:11 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/04/27 22:37:07 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@ void	set_animation(t_player *player, t_sprites *sprites, bool force)
 {
 	if (!player || !sprites)
 		return ;
-	if (player->current_sprites && player->current_sprites->type == sprites->type && !force)
+	if (player->current_sprites && ((player->current_sprites->type == sprites->type && !force)
+		|| (player->current_sprites->type == SHOOT)))
 		return ;
 	if (player->current_sprites)
 		player->current_sprites->img->enabled = false;
@@ -55,6 +56,8 @@ void	player_animation(void *param)
 		player->current_sprites = player->current_sprites->next;
 		time = 0;
 	}
+	if (!player->current_sprites)
+		set_animation(player, player->idle_sprites, true);
 	player->current_sprites->img->instances[0].x = player->img->instances[0].x;
 	player->current_sprites->img->instances[0].y = player->img->instances[0].y;
 	player->current_sprites->img->enabled = true;

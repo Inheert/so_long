@@ -6,13 +6,13 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 12:48:19 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/04/23 11:35:30 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/04/27 22:25:52 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/so_long.h"
 
-void	t_sprites_add_back(t_sprites **sprites, t_sprites *new)
+void	t_sprites_add_back(t_sprites **sprites, t_sprites *new, bool is_loop)
 {
 	t_sprites	*first;
 	t_sprites	*temp;
@@ -27,10 +27,11 @@ void	t_sprites_add_back(t_sprites **sprites, t_sprites *new)
 	}
 	first = *sprites;
 	temp = *sprites;
-	while (temp->next != first)
+	while (temp->next && temp->next != first)
 		temp = temp->next;
 	temp->next = new;
-	new->next = *sprites;
+	if (is_loop)
+		new->next = *sprites;
 }
 
 t_sprites	*create_sprite(t_player *player, char *path, unsigned int sprite_n)
@@ -61,7 +62,7 @@ t_sprites	*create_sprite(t_player *player, char *path, unsigned int sprite_n)
 	return (sprite);
 }
 
-t_sprites	*create_animation_chain(t_player *player, char *sprites_path, unsigned char sprites_count, t_sprite_types type)
+t_sprites	*create_animation_chain(t_player *player, bool is_loop, char *sprites_path, unsigned char sprites_count, t_sprite_types type)
 {
 	t_sprites	*sprites;
 	t_sprites	*sprite;
@@ -75,7 +76,7 @@ t_sprites	*create_animation_chain(t_player *player, char *sprites_path, unsigned
 		if (!sprite)
 			return (mlx_close_window(player->mlx), raise_error(SPRITES_CREATION_ERROR), NULL);
 		sprite->type = type;
-		t_sprites_add_back(&sprites, sprite);
+		t_sprites_add_back(&sprites, sprite, is_loop);
 		i++;
 	}
 	return (sprites);

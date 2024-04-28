@@ -6,7 +6,7 @@
 #    By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/25 14:27:18 by tclaereb          #+#    #+#              #
-#    Updated: 2024/04/18 13:43:34 by tclaereb         ###   ########.fr        #
+#    Updated: 2024/04/27 22:16:45 by tclaereb         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,7 +31,7 @@ _SRCS = main.c \
 		mlx/player/mlx_player.c \
 		mlx/player/utils.c \
 		mlx/player/moover.c \
-		mlx/player/aiming.c \
+		mlx/player/shooter.c \
 		mlx/player/animate.c \
 		mlx/player/animater.c \
 
