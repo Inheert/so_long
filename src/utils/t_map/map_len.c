@@ -6,13 +6,13 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 15:56:04 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/04/12 16:24:32 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/04/28 09:23:49 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/so_long.h"
 
-int *get_map_len(t_map *map)
+int	*get_map_len(t_map *map)
 {
 	int		*map_len;
 	t_map	*tmp;

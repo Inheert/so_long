@@ -6,19 +6,20 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 07:11:07 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/04/28 08:27:17 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/04/28 09:44:07 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/so_long.h"
 
-
 mlx_image_t	*create_img(t_map *map, mlx_t *mlx, int width, int height)
 {
 	mlx_image_t		*img;
 	mlx_texture_t	*texture;
+
 	if (map->slot[0] == '1')
-		texture = mlx_load_png("./src/textures/decor/256Tiles Square02Grass.png");
+		texture = mlx_load_png(
+				"./src/textures/decor/256Tiles Square02Grass.png");
 	else
 		texture = mlx_load_png("./src/textures/decor/256_Dirt Pebbles 01.png");
 	if (!texture)
@@ -28,7 +29,7 @@ mlx_image_t	*create_img(t_map *map, mlx_t *mlx, int width, int height)
 		return (mlx_close_window(mlx), raise_error(MLX_IMG_ERROR), NULL);
 	if (!mlx_resize_image(img, MLX_WIN_WIDTH / width, MLX_WIN_HEIGHT / height))
 		return (mlx_close_window(mlx), raise_error(MLX_IMG_ERROR), NULL);
-	if (mlx_image_to_window(mlx, img, 0, 0) == -1	)
+	if (mlx_image_to_window(mlx, img, 0, 0) == -1)
 		return (mlx_close_window(mlx), raise_error(MLX_IMG_ERROR), NULL);
 	return (img);
 }
@@ -53,11 +54,13 @@ void	set_img(t_map *map, mlx_t *mlx, int width, int height)
 	if (!map->left)
 		img->instances[0].x = 0;
 	else
-		img->instances[0].x = map->left->img->instances[0].x + MLX_WIN_WIDTH / map_width;
+		img->instances[0].x = map->left->img->instances[0].x
+			+ MLX_WIN_WIDTH / map_width;
 	if (!map->upper)
 		img->instances[0].y = 0;
 	else
-		img->instances[0].y = map->upper->img->instances[0].y + MLX_WIN_HEIGHT / map_height;
+		img->instances[0].y = map->upper->img->instances[0].y
+			+ MLX_WIN_HEIGHT / map_height;
 	map->img = img;
 	map->x = img->instances[0].x;
 	map->y = img->instances[0].y;
@@ -70,7 +73,7 @@ void	_mlx_create_map(mlx_t *mlx, t_map_info *map_info)
 	mlx++;
 }
 
-mlx_win_cursor_t	*create_mlx_cursor()
+mlx_win_cursor_t	*create_mlx_cursor(void)
 {
 	mlx_texture_t	*texture;
 

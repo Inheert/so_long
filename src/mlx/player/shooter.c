@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 22:12:01 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/04/28 08:27:11 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/04/28 09:27:17 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ void	*delete_bullet_trace(void *args)
 	int32_t		y;
 	uint32_t	delay;
 	mlx_image_t	*img;
-
 
 	if (!args)
 		return (NULL);
@@ -56,46 +55,57 @@ void	prepare_delete_bullet_trace(int32_t x, int32_t y, uint32_t delay)
 	pthread_detach(tid);
 }
 
-bool is_shoot_hit(t_player *player, t_point current_pos)
+bool	is_shoot_hit(t_player *player, t_point current_pos)
 {
-	t_map *map = player->pos;
+	t_map	*map;
+
+	map = player->pos;
 	while (map != NULL)
 	{
-		if (map->x <= current_pos.x && map->x + (int32_t)map->img->width >= current_pos.x
-			&& map->y <= current_pos.y && map->y + (int32_t)map->img->height >= current_pos.y)
+		if (map->x <= current_pos.x && map->x + (int32_t)map->img->width
+			>= current_pos.x && map->y <= current_pos.y && map->y
+			+ (int32_t)map->img->height >= current_pos.y)
 		{
 			if (map->slot[0] == '1')
 				return (true);
 			break ;
 		}
-		if (current_pos.x > map->x && current_pos.x > map->img->instances[0].x + (int32_t)map->img->width)
+		if (current_pos.x > map->x && current_pos.x
+			> map->img->instances[0].x + (int32_t)map->img->width)
 			map = map->right;
-		else if (current_pos.x < map->x && current_pos.x < map->img->instances[0].x + (int32_t)map->img->width)
+		else if (current_pos.x < map->x && current_pos.x
+			< map->img->instances[0].x + (int32_t)map->img->width)
 			map = map->left;
-		if (current_pos.y > map->y && current_pos.y > map->img->instances[0].y + (int32_t)map->img->height)
+		if (current_pos.y > map->y && current_pos.y
+			> map->img->instances[0].y + (int32_t)map->img->height)
 			map = map->below;
-		else if (current_pos.y < map->y && current_pos.y < map->img->instances[0].y + (int32_t)map->img->height)
+		else if (current_pos.y < map->y && current_pos.y
+			< map->img->instances[0].y + (int32_t)map->img->height)
 			map = map->upper;
 	}
 	return (false);
 }
 
-void	draw_impact(t_point current_pos) {
+void	draw_impact(t_point current_pos)
+{
 	mlx_image_t		*img;
 	double			angle;
 	unsigned int	distance;
 
 	img = img_sharing(NULL);
 	if (!img)
-		return;
+		return ;
 	distance = 0;
 	while (distance < BULLET_IMPACT_LINE_SIZE)
 	{
 		angle = 0;
 		while (angle < 2 * M_PI)
 		{
-			mlx_put_pixel(img, current_pos.x + cos(angle) * distance, current_pos.y + sin(angle) * distance, BULLET_IMPACT_COLOR);
-			prepare_delete_bullet_trace(current_pos.x + cos(angle) * distance, current_pos.y + sin(angle) * distance, BULLET_IMPACT_VANISHING_TIME);
+			mlx_put_pixel(img, current_pos.x + cos(angle) * distance,
+				current_pos.y + sin(angle) * distance, BULLET_IMPACT_COLOR);
+			prepare_delete_bullet_trace(current_pos.x + cos(angle) * distance,
+				current_pos.y + sin(angle) * distance,
+				BULLET_IMPACT_VANISHING_TIME);
 			angle += M_PI / BULLET_IMPACT_LINE_PER_SIDE;
 			usleep(BULLET_IMPACT_SLOWNESS);
 		}
@@ -128,7 +138,8 @@ void	raycast(t_player *player, t_point start, t_point end, mlx_image_t *img)
 	current.y = start.y;
 	error = delta.x - delta.y;
 	player = (t_player *)player;
-	while (current.x > 0 && current.x < MLX_WIN_WIDTH && current.y > 0 && current.y < MLX_WIN_HEIGHT)
+	while (current.x > 0 && current.x < MLX_WIN_WIDTH
+		&& current.y > 0 && current.y < MLX_WIN_HEIGHT)
 	{
 		if (is_shoot_hit(player, current))
 		{
@@ -147,7 +158,8 @@ void	raycast(t_player *player, t_point start, t_point end, mlx_image_t *img)
 			current.y += step.y;
 		}
 		mlx_put_pixel(img, current.x, current.y, BULLET_TRACE_COLOR);
-		prepare_delete_bullet_trace(current.x, current.y, BULLET_TRACE_VANISHING_TIME);
+		prepare_delete_bullet_trace(current.x, current.y,
+			BULLET_TRACE_VANISHING_TIME);
 		usleep(BULLET_TRACE_SLOWNESS);
 	}
 }
@@ -193,7 +205,8 @@ void	shoot_bullet(t_player *player)
 
 	if (!bullet_trace_img)
 	{
-		bullet_trace_img = mlx_new_image(player->mlx, MLX_WIN_WIDTH, MLX_WIN_HEIGHT);
+		bullet_trace_img = mlx_new_image(
+				player->mlx, MLX_WIN_WIDTH, MLX_WIN_HEIGHT);
 		mlx_image_to_window(player->mlx, bullet_trace_img, 0, 0);
 		img_sharing(bullet_trace_img);
 	}
@@ -205,7 +218,8 @@ void	shoot_bullet(t_player *player)
 	prepare_raycast_thread(player, start, end);
 }
 
-void	on_mouse_action(mouse_key_t button, action_t action, modifier_key_t mods, void* param)
+void	on_mouse_action(mouse_key_t button, action_t action,
+	modifier_key_t mods, void *param)
 {
 	t_player	*player;
 
@@ -223,7 +237,7 @@ void	player_aiming(double x, double y, void *param)
 
 	player = (t_player *)param;
 	if (!player)
-		return;
+		return ;
 	player->x_aiming = x + 30;
 	player->y_aiming = y + 30;
 }

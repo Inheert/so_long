@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 12:48:19 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/04/27 22:25:52 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/04/28 09:46:18 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,17 +52,18 @@ t_sprites	*create_sprite(t_player *player, char *path, unsigned int sprite_n)
 	if (!texture)
 		return (raise_error(MLX_TEXTURE_ERROR), NULL);
 	sprite->img = mlx_texture_to_image(player->mlx, texture);
-	if (!sprite->img)
-		return (raise_error(MLX_IMG_ERROR), NULL);
-	if (!mlx_resize_image(sprite->img, MLX_WIN_HEIGHT / PLAYER_SIZE_DIV, MLX_WIN_HEIGHT / PLAYER_SIZE_DIV))
+	if (!sprite->img || !mlx_resize_image(sprite->img, MLX_WIN_HEIGHT
+			/ PLAYER_SIZE_DIV, MLX_WIN_HEIGHT / PLAYER_SIZE_DIV))
 		return (raise_error(MLX_IMG_ERROR), NULL);
 	if (mlx_image_to_window(player->mlx, sprite->img, 0, 0) == -1)
-		return (mlx_close_window(player->mlx), raise_error(MLX_IMG_ERROR), NULL);
+		return (mlx_close_window(player->mlx),
+			raise_error(MLX_IMG_ERROR), NULL);
 	sprite->img->enabled = false;
 	return (sprite);
 }
 
-t_sprites	*create_animation_chain(t_player *player, bool is_loop, char *sprites_path, unsigned char sprites_count, t_sprite_types type)
+t_sprites	*create_animation_chain(t_player *player, bool is_loop,
+	char *sprites_path, unsigned char sprites_count, t_sprite_types type)
 {
 	t_sprites	*sprites;
 	t_sprites	*sprite;
@@ -74,7 +75,8 @@ t_sprites	*create_animation_chain(t_player *player, bool is_loop, char *sprites_
 	{
 		sprite = create_sprite(player, sprites_path, i);
 		if (!sprite)
-			return (mlx_close_window(player->mlx), raise_error(SPRITES_CREATION_ERROR), NULL);
+			return (mlx_close_window(player->mlx),
+				raise_error(SPRITES_CREATION_ERROR), NULL);
 		sprite->type = type;
 		t_sprites_add_back(&sprites, sprite, is_loop);
 		i++;

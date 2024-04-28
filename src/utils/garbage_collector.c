@@ -6,13 +6,14 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 07:56:02 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/04/10 06:33:37 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/04/28 09:24:24 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/so_long.h"
 
-// Add free option for a chained list so all the chain can be free instead of just one element
+// Add free option for a chained list so
+// all the chain can be free instead of just one element
 t_garbage	*new_garbage(void *ptr)
 {
 	t_garbage	*garbage;
