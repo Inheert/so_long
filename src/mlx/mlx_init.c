@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 07:11:07 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/04/17 17:59:42 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/04/28 08:27:17 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,16 @@ void	_mlx_create_map(mlx_t *mlx, t_map_info *map_info)
 	mlx++;
 }
 
+mlx_win_cursor_t	*create_mlx_cursor()
+{
+	mlx_texture_t	*texture;
+
+	texture = mlx_load_png("./src/textures/player/cursor/crosshair1.png");
+	if (!texture)
+		return (raise_error(MLX_TEXTURE_ERROR), close_mlx(NULL), NULL);
+	return (mlx_create_cursor(texture));
+}
+
 void	start_mlx(t_map_info *map_info)
 {
 	mlx_t		*mlx;
@@ -80,6 +90,7 @@ void	start_mlx(t_map_info *map_info)
 	close_mlx(mlx);
 	_mlx_create_map(mlx, map_info);
 	init_player(mlx, map_info->map);
+	mlx_set_cursor(mlx, create_mlx_cursor());
 	init_mlx_hooks(mlx);
 	mlx_loop(mlx);
 	mlx_terminate(mlx);

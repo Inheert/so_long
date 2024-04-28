@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 22:12:01 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/04/28 07:29:11 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/04/28 08:27:11 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -224,6 +224,6 @@ void	player_aiming(double x, double y, void *param)
 	player = (t_player *)param;
 	if (!player)
 		return;
-	player->x_aiming = x;
-	player->y_aiming = y;
+	player->x_aiming = x + 30;
+	player->y_aiming = y + 30;
 }
