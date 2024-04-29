@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/25 14:39:28 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/04/28 07:30:55 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/04/29 15:48:46 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,9 @@
 # define MLX_TEXTURE_ERROR "A problem has occured when using MLX texture.\n\0"
 # define PLAYER_CREATION_ERROR "A problem has occured when creating player.\n\0"
 # define SPRITES_CREATION_ERROR "A problem has occured when creating sprites.\n\0"
+# define NPC_CREATION_ERROR "A problem has occured when creating npc.\n\0"
 
-#define M_PI 3.14159265358979323846
+# define M_PI 3.14159265358979323846
 
 # define MLX_WIN_WIDTH 3860
 # define MLX_WIN_HEIGHT 2100
@@ -57,8 +58,14 @@
 # define S_HANDGUN_MELEE_PATH "./src/textures/player/handgun/meleeattack/survivor-meleeattack_handgun_"
 # define S_HANDGUN_MELEE_COUNT 14
 
+# define PLAYER_HEALTH 3
 # define PLAYER_WALK_SPEED 500
 # define PLAYER_RUN_SPEED 1500
+
+# define NPC_HEALTH 1
+# define NPC_WALK_SPEED 10
+# define MPC_RUN_SPEED 20
+# define NPC_TICK_BEFORE_MODIFY_MOVEMENT 25
 
 # define BULLET_TRACE_SLOWNESS 100
 # define BULLET_TRACE_VANISHING_TIME 15000
@@ -124,6 +131,7 @@ typedef struct s_map
 	struct s_map	*upper;
 	struct s_map	*below;
 	mlx_image_t		*img;
+	mlx_image_t		*overlay;
 	int32_t			x;
 	int32_t			y;
 } t_map;
@@ -144,18 +152,24 @@ typedef struct s_sprites
 
 typedef struct s_player
 {
-	mlx_t		*mlx;
-	t_map		*pos;
-	mlx_image_t	*img;
-	t_collision	*collision;
-	double		x_aiming;
-	double		y_aiming;
-	t_sprites	*current_sprites;
-	t_sprites	*idle_sprites;
-	t_sprites	*walking_sprites;
-	t_sprites	*shoot_sprites;
-	t_sprites	*reload_sprites;
-	t_sprites	*melee_sprites;
+	mlx_t			*mlx;
+	t_map			*pos;
+	mlx_image_t		*img;
+	t_collision		*collision;
+	t_sprites		*current_sprites;
+	t_sprites		*idle_sprites;
+	t_sprites		*walking_sprites;
+	t_sprites		*shoot_sprites;
+	t_sprites		*reload_sprites;
+	t_sprites		*melee_sprites;
+	struct s_player	**ennemies;
+	unsigned int	health;
+	bool			on_remove;
+	double			x_aiming;
+	double			y_aiming;
+	int				npc_move_x;
+	int				npc_move_y;
+	int				npc_move_count;
 } t_player;
 
 typedef struct s_point
@@ -193,6 +207,7 @@ t_map_info	*map_parsing(char *filename);
 t_map		*map_new(char slot[2]);
 t_map		*copy_map(t_map *map);
 t_map		*get_start_pos(t_map *map);
+t_map		**find_symbols(t_map *map, char c);
 int 		*get_map_len(t_map *map);
 void		map_add_right(t_map **map, t_map *new);
 void		map_add_below(t_map **map, t_map *new);
@@ -208,6 +223,8 @@ void		ft_key_hook(mlx_key_data_t keydata, void* param);
 t_player	*init_player(mlx_t *mlx, t_map *map);
 t_map		*find_player_pos(t_map *map);
 t_sprites	*create_animation_chain(t_player *player, bool is_loop, char *sprites_path, unsigned char sprites_count, t_sprite_types type);
+bool		predict_player_pos(t_player	*player, int x, int y, int speed);
+void		create_player_collision(t_player *player);
 
 void		player_movement(void *param);
 void		player_animation(void *param);
@@ -215,4 +232,9 @@ void		player_aiming(double x, double y, void *param);
 void		set_animation(t_player *player, t_sprites *sprites, bool force);
 void		remove_animation(t_player *player, t_sprites *sprites);
 void		on_mouse_action(mouse_key_t button, action_t action, modifier_key_t mods, void* param);
+
+void		init_all_npcs(mlx_t *mlx, t_map *map, t_player *player);
+void		npc_movement(void *param);
+
+void		kill_entity(t_player *ent, t_player *killer);
 #endif

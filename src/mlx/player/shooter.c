@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 22:12:01 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/04/28 09:27:17 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/04/29 15:20:48 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,32 @@ void	prepare_delete_bullet_trace(int32_t x, int32_t y, uint32_t delay)
 	pthread_detach(tid);
 }
 
-bool	is_shoot_hit(t_player *player, t_point current_pos)
+bool	is_shoot_hit_ennemy(t_player *player, t_point current_pos)
+{
+	t_player	*npc;
+	int			i;
+
+	i = 0;
+	while (player->ennemies[i])
+	{
+		npc = player->ennemies[i++];
+		if (npc && current_pos.x >= npc->collision->img->instances[0].x
+			&& current_pos.x <= npc->collision->img->instances[0].x
+			+ (int32_t)npc->collision->img->width
+			&& current_pos.y >= npc->collision->img->instances[0].y
+			&& current_pos.y <= npc->collision->img->instances[0].y
+			+ (int32_t)npc->collision->img->height)
+		{
+				npc->health--;
+				if (npc->health <= 0)
+					kill_entity(npc, player);
+				return (true);
+		}
+	}
+	return (false);
+}
+
+bool	is_shoot_hit_map(t_player *player, t_point current_pos)
 {
 	t_map	*map;
 
@@ -141,7 +166,9 @@ void	raycast(t_player *player, t_point start, t_point end, mlx_image_t *img)
 	while (current.x > 0 && current.x < MLX_WIN_WIDTH
 		&& current.y > 0 && current.y < MLX_WIN_HEIGHT)
 	{
-		if (is_shoot_hit(player, current))
+		if (!player->mlx)
+			return ;
+		if (is_shoot_hit_ennemy(player, current) || is_shoot_hit_map(player, current))
 		{
 			draw_impact(current);
 			break ;

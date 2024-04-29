@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 16:15:54 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/04/28 09:48:42 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/04/29 13:32:42 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,9 @@ void	create_player_collision(t_player *player)
 	player->collision = collision;
 }
 
-void	initialize_player_components(mlx_t *mlx, t_player *player)
+void	initialize_player_components(t_player *player)
 {
+	player->health = PLAYER_HEALTH;
 	player->idle_sprites = create_animation_chain(
 			player, true, S_HANDGUN_IDLE_PATH, S_HANDGUN_IDLE_COUNT, IDLE);
 	player->walking_sprites = create_animation_chain(
@@ -52,10 +53,10 @@ void	initialize_player_components(mlx_t *mlx, t_player *player)
 	player->melee_sprites = create_animation_chain(
 			player, false, S_HANDGUN_MELEE_PATH, S_HANDGUN_MELEE_COUNT, MELEE);
 	create_player_collision(player);
-	mlx_loop_hook(mlx, &player_movement, player);
-	mlx_cursor_hook(mlx, &player_aiming, player);
-	mlx_mouse_hook(mlx, &on_mouse_action, player);
-	mlx_loop_hook(mlx, &player_animation, player);
+	mlx_loop_hook(player->mlx, &player_movement, player);
+	mlx_cursor_hook(player->mlx, &player_aiming, player);
+	mlx_mouse_hook(player->mlx, &on_mouse_action, player);
+	mlx_loop_hook(player->mlx, &player_animation, player);
 }
 
 t_player	*init_player(mlx_t *mlx, t_map *map)
@@ -64,6 +65,8 @@ t_player	*init_player(mlx_t *mlx, t_map *map)
 	t_map			*pos;
 	mlx_texture_t	*texture;
 
+	if (!mlx || !map)
+		raise_error(PLAYER_CREATION_ERROR);
 	pos = find_player_pos(map);
 	if (!pos)
 		raise_error(PLAYER_CREATION_ERROR);
@@ -83,6 +86,6 @@ t_player	*init_player(mlx_t *mlx, t_map *map)
 	if (mlx_image_to_window(mlx, player->img, pos->x, pos->y))
 		return (raise_error(MLX_IMG_ERROR), close_mlx(NULL), NULL);
 	player->img->enabled = false;
-	initialize_player_components(mlx, player);
+	initialize_player_components(player);
 	return (player);
 }

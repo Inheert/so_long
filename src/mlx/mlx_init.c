@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 07:11:07 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/04/28 09:44:07 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/04/29 16:04:33 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ mlx_image_t	*create_img(t_map *map, mlx_t *mlx, int width, int height)
 	mlx_image_t		*img;
 	mlx_texture_t	*texture;
 
+	if (!map || !mlx)
+		return (NULL);
 	if (map->slot[0] == '1')
 		texture = mlx_load_png(
 				"./src/textures/decor/256Tiles Square02Grass.png");
@@ -27,7 +29,31 @@ mlx_image_t	*create_img(t_map *map, mlx_t *mlx, int width, int height)
 	img = mlx_texture_to_image(mlx, texture);
 	if (!img)
 		return (mlx_close_window(mlx), raise_error(MLX_IMG_ERROR), NULL);
-	if (!mlx_resize_image(img, MLX_WIN_WIDTH / width, MLX_WIN_HEIGHT / height))
+	if (!mlx_resize_image(img, MLX_WIN_WIDTH / width, MLX_WIN_WIDTH / height))
+		return (mlx_close_window(mlx), raise_error(MLX_IMG_ERROR), NULL);
+	if (mlx_image_to_window(mlx, img, 0, 0) == -1)
+		return (mlx_close_window(mlx), raise_error(MLX_IMG_ERROR), NULL);
+	return (img);
+}
+
+mlx_image_t	*create_overlay(t_map *map, mlx_t *mlx, int width, int height)
+{
+	mlx_image_t		*img;
+	mlx_texture_t	*texture;
+
+	if (!map || !mlx)
+		return (NULL);
+	if (map->slot[0] == 'E')
+		texture = mlx_load_png(
+				"./src/textures/decor/256_Mound 05.png");
+	else
+		return (NULL);
+	if (!texture)
+		return (mlx_close_window(mlx), raise_error(MLX_TEXTURE_ERROR), NULL);
+	img = mlx_texture_to_image(mlx, texture);
+	if (!img)
+		return (mlx_close_window(mlx), raise_error(MLX_IMG_ERROR), NULL);
+	if (!mlx_resize_image(img, MLX_WIN_WIDTH / width, MLX_WIN_WIDTH / height))
 		return (mlx_close_window(mlx), raise_error(MLX_IMG_ERROR), NULL);
 	if (mlx_image_to_window(mlx, img, 0, 0) == -1)
 		return (mlx_close_window(mlx), raise_error(MLX_IMG_ERROR), NULL);
@@ -51,6 +77,8 @@ void	set_img(t_map *map, mlx_t *mlx, int width, int height)
 	if (!map || !smlx || !map_width || !map_height)
 		return ;
 	img = create_img(map, smlx, map_width, map_height);
+	if (!img)
+		return ;
 	if (!map->left)
 		img->instances[0].x = 0;
 	else
@@ -66,10 +94,35 @@ void	set_img(t_map *map, mlx_t *mlx, int width, int height)
 	map->y = img->instances[0].y;
 }
 
-void	_mlx_create_map(mlx_t *mlx, t_map_info *map_info)
+void	set_overlay(t_map *map, mlx_t *mlx, int width, int height)
+{
+	static mlx_t	*smlx = NULL;
+	static int		map_width = 0;
+	static int		map_height = 0;
+
+	if (!smlx && mlx)
+		smlx = mlx;
+	if (!map_width || !map_height)
+	{
+		map_width = width;
+		map_height = height;
+	}
+	if (!map || !smlx || !map_width || !map_height)
+		return ;
+	map->overlay = create_overlay(map, smlx, map_width, map_height);
+	if (map->overlay)
+	{
+		map->overlay->instances[0].x = map->x;
+		map->overlay->instances[0].y = map->y;
+	}
+}
+
+void	mlx_create_map(mlx_t *mlx, t_map_info *map_info)
 {
 	set_img(NULL, mlx, map_info->map_width, map_info->map_height);
+	set_overlay(NULL, mlx, map_info->map_width, map_info->map_height);
 	apply_func_on_map(map_info->map, set_img);
+	apply_func_on_map(map_info->map, set_overlay);
 	mlx++;
 }
 
@@ -91,8 +144,8 @@ void	start_mlx(t_map_info *map_info)
 	if (!mlx)
 		raise_error(MLX_ERROR);
 	close_mlx(mlx);
-	_mlx_create_map(mlx, map_info);
-	init_player(mlx, map_info->map);
+	mlx_create_map(mlx, map_info);
+	init_all_npcs(mlx, map_info->map, init_player(mlx, map_info->map));
 	mlx_set_cursor(mlx, create_mlx_cursor());
 	init_mlx_hooks(mlx);
 	mlx_loop(mlx);
