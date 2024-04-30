@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 13:41:16 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/04/29 15:22:33 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/04/30 14:17:46 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,14 @@ void	remove_sprites(t_player *ent)
 	garbage_collector(DELETE, ent->melee_sprites);
 }
 
+void	remove_hitbox(t_player *ent)
+{
+	if (!ent)
+		return ;
+	mlx_delete_image(ent->mlx, ent->collision->img);
+	garbage_collector(DELETE, ent->collision);
+}
+
 void	kill_entity(t_player *ent, t_player *killer)
 {
 	int	i;
@@ -64,6 +72,8 @@ void	kill_entity(t_player *ent, t_player *killer)
 			find = true;
 		i++;
 	}
+	if (killer->ennemies[i - 1] == ent)
+		killer->ennemies[i - 1] = NULL;
 	remove_sprites(ent);
 	garbage_collector(DELETE, ent);
 }

@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/25 14:39:28 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/04/29 15:48:46 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/04/30 14:17:03 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@
 # define S_HANDGUN_MELEE_COUNT 14
 
 # define PLAYER_HEALTH 3
-# define PLAYER_WALK_SPEED 500
+# define PLAYER_WALK_SPEED 50
 # define PLAYER_RUN_SPEED 1500
 
 # define NPC_HEALTH 1
