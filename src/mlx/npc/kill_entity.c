@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 13:41:16 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/04/30 14:17:46 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/05/09 09:06:22 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,33 +14,64 @@
 
 void	remove_sprite(mlx_t *mlx, t_sprites *sprite)
 {
+	t_sprites	*first;
 	t_sprites	*tmp;
+	int			i;
 
 	if (!sprite || !mlx)
 		return ;
+	first = sprite;
+	i = 0;
 	while (sprite)
 	{
+		if (sprite == first && i++ != 0)
+			break ;
 		tmp = sprite;
 		sprite = sprite->next;
+		sprite->prev = NULL;
 		mlx_delete_image(mlx, tmp->img);
 	}
 }
 
 void	remove_sprites(t_player *ent)
 {
-	if (!ent)
+	if (!ent->mlx)
 		return ;
-	remove_sprite(ent->mlx, ent->current_sprites);
-	remove_sprite(ent->mlx, ent->walking_sprites);
-	garbage_collector(DELETE, ent->walking_sprites);
-	remove_sprite(ent->mlx, ent->idle_sprites);
-	garbage_collector(DELETE, ent->idle_sprites);
-	remove_sprite(ent->mlx, ent->shoot_sprites);
-	garbage_collector(DELETE, ent->shoot_sprites);
-	remove_sprite(ent->mlx, ent->reload_sprites);
-	garbage_collector(DELETE, ent->reload_sprites);
-	remove_sprite(ent->mlx, ent->melee_sprites);
-	garbage_collector(DELETE, ent->melee_sprites);
+	if (ent->current_sprites)
+	{
+		remove_sprite(ent->mlx, ent->current_sprites);
+		ent->current_sprites = NULL;
+	}
+	if (!ent->walking_sprites)
+	{
+		remove_sprite(ent->mlx, ent->walking_sprites);
+		garbage_collector(DELETE, ent->walking_sprites);
+		ent->walking_sprites = NULL;
+	}
+	if (!ent->idle_sprites)
+	{
+		remove_sprite(ent->mlx, ent->idle_sprites);
+		garbage_collector(DELETE, ent->idle_sprites);
+		ent->idle_sprites = NULL;
+	}
+	if (!ent->shoot_sprites)
+	{
+		remove_sprite(ent->mlx, ent->shoot_sprites);
+		garbage_collector(DELETE, ent->shoot_sprites);
+		ent->shoot_sprites = NULL;
+	}
+	if (!ent->reload_sprites)
+	{
+		remove_sprite(ent->mlx, ent->reload_sprites);
+		garbage_collector(DELETE, ent->reload_sprites);
+		ent->reload_sprites = NULL;
+	}
+	if (!ent->melee_sprites)
+	{
+		remove_sprite(ent->mlx, ent->melee_sprites);
+		garbage_collector(DELETE, ent->melee_sprites);
+		ent->melee_sprites = NULL;
+	}
 }
 
 void	remove_hitbox(t_player *ent)
@@ -53,8 +84,8 @@ void	remove_hitbox(t_player *ent)
 
 void	kill_entity(t_player *ent, t_player *killer)
 {
-	int	i;
-	int	find;
+	int		i;
+	bool	find;
 
 	if (!ent || !ent->mlx)
 		return ;
@@ -74,6 +105,10 @@ void	kill_entity(t_player *ent, t_player *killer)
 	}
 	if (killer->ennemies[i - 1] == ent)
 		killer->ennemies[i - 1] = NULL;
+	usleep(20000);
 	remove_sprites(ent);
-	garbage_collector(DELETE, ent);
+	remove_hitbox(ent);
+	ent->already_remove = true;
+	//garbage_collector(DELETE, ent);
 }
+

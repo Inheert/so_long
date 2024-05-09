@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/25 14:39:28 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/04/30 14:17:03 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/05/09 09:04:55 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,15 +38,13 @@
 # define SPRITES_CREATION_ERROR "A problem has occured when creating sprites.\n\0"
 # define NPC_CREATION_ERROR "A problem has occured when creating npc.\n\0"
 
-# define M_PI 3.14159265358979323846
-
 # define MLX_WIN_WIDTH 3860
 # define MLX_WIN_HEIGHT 2100
 # define MLX_IMG_WIDTH 150
 
 # define PLAYER_SIZE_DIV 10
 # define HITBOX_SIZE_DIV 15
-# define SHOW_COLLISION_BOX 0
+# define SHOW_COLLISION_BOX 1
 
 # define SPRITES_FRAME_RATE_PER_SEC 0.01
 # define S_HANDGUN_IDLE_PATH "./src/textures/player/handgun/idle/survivor-idle_handgun_"
@@ -59,7 +57,7 @@
 # define S_HANDGUN_MELEE_COUNT 14
 
 # define PLAYER_HEALTH 3
-# define PLAYER_WALK_SPEED 50
+# define PLAYER_WALK_SPEED 600
 # define PLAYER_RUN_SPEED 1500
 
 # define NPC_HEALTH 1
@@ -77,10 +75,16 @@
 # define BULLET_IMPACT_LINE_SIZE 50
 # define BULLET_IMPACT_COLOR 0x00FFFFFF
 
+# define M_PI 3.14159265358979323846
+
 typedef enum {
+	INIT,
 	ADD,
+	ADD_TEXTURE,
+	ADD_IMG,
 	DELETE,
 	CLEAR,
+	DISPLAY,
 } t_garbage_action;
 
 typedef enum {
@@ -134,19 +138,22 @@ typedef struct s_map
 	mlx_image_t		*overlay;
 	int32_t			x;
 	int32_t			y;
+	bool			on_remove;
 } t_map;
 
 typedef struct s_map_info
 {
-	t_map	*map;
-	int		map_width;
-	int		map_height;
+	t_map			*map;
+	int				map_width;
+	int				map_height;
+	pthread_mutex_t	mutex;
 } t_map_info;
 
 typedef struct s_sprites
 {
 	mlx_image_t				*img;
 	enum s_sprite_types		type;
+	struct s_sprites		*prev;
 	struct s_sprites		*next;
 } t_sprites;
 
@@ -165,6 +172,7 @@ typedef struct s_player
 	struct s_player	**ennemies;
 	unsigned int	health;
 	bool			on_remove;
+	bool			already_remove;
 	double			x_aiming;
 	double			y_aiming;
 	int				npc_move_x;
@@ -217,14 +225,14 @@ void		display_map(t_map *map, int display_link);
 
 void		start_mlx(t_map_info *map_info);
 void		close_mlx(mlx_t *mlx);
-void		init_mlx_hooks(mlx_t *mlx);
+void		init_mlx_hooks(mlx_t *mlx, t_map_info *map_info);
 void		ft_key_hook(mlx_key_data_t keydata, void* param);
 
-t_player	*init_player(mlx_t *mlx, t_map *map);
+t_player	*init_player(mlx_t *mlx, t_map_info *map);
 t_map		*find_player_pos(t_map *map);
-t_sprites	*create_animation_chain(t_player *player, bool is_loop, char *sprites_path, unsigned char sprites_count, t_sprite_types type);
+t_sprites	*create_animation_chain(t_player *player, t_map_info *map, bool is_loop, char *sprites_path, unsigned char sprites_count, t_sprite_types type);
 bool		predict_player_pos(t_player	*player, int x, int y, int speed);
-void		create_player_collision(t_player *player);
+void		create_player_collision(t_player *player, t_map_info *map);
 
 void		player_movement(void *param);
 void		player_animation(void *param);
@@ -233,7 +241,7 @@ void		set_animation(t_player *player, t_sprites *sprites, bool force);
 void		remove_animation(t_player *player, t_sprites *sprites);
 void		on_mouse_action(mouse_key_t button, action_t action, modifier_key_t mods, void* param);
 
-void		init_all_npcs(mlx_t *mlx, t_map *map, t_player *player);
+void		init_all_npcs(mlx_t *mlx, t_map_info *map, t_player *player);
 void		npc_movement(void *param);
 
 void		kill_entity(t_player *ent, t_player *killer);

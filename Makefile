@@ -6,7 +6,7 @@
 #    By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/25 14:27:18 by tclaereb          #+#    #+#              #
-#    Updated: 2024/04/29 13:51:25 by tclaereb         ###   ########.fr        #
+#    Updated: 2024/05/09 09:06:38 by tclaereb         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -48,7 +48,7 @@ SRCO = $(SRCS:.c=.o)
 MAKE_LIBFT = $(MAKE) -C ./libft
 LIBFT = ./libft/libft.a
 
-FLAG = -g -Wall -Wextra -Werror
+FLAG = -g3 -Wall -Wextra -Werror -fsanitize=address
 INC = -I includes/
 
 all : $(NAME_C) $(NAME_P)
@@ -57,7 +57,7 @@ $(LIBFT):
 	$(MAKE_LIBFT)
 
 $(NAME_P) : $(SRCO) | $(LIBFT)
-	gcc -o $(NAME_P) $(SRCO) $(LIBFT) MLX42/build/libmlx42.a -ldl -lglfw -pthread -lm
+	gcc $(FLAG) -o $(NAME_P) $(SRCO) $(LIBFT) MLX42/build/libmlx42.a -ldl -lglfw -pthread -lm
 
 %.o : %.c
 	gcc $(FLAG) -c $< -o $@ $(INC)

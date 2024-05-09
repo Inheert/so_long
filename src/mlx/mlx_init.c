@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 07:11:07 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/04/29 16:04:33 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/05/09 08:46:02 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +26,15 @@ mlx_image_t	*create_img(t_map *map, mlx_t *mlx, int width, int height)
 		texture = mlx_load_png("./src/textures/decor/256_Dirt Pebbles 01.png");
 	if (!texture)
 		return (mlx_close_window(mlx), raise_error(MLX_TEXTURE_ERROR), NULL);
+	garbage_collector(ADD_TEXTURE, texture);
 	img = mlx_texture_to_image(mlx, texture);
 	if (!img)
 		return (mlx_close_window(mlx), raise_error(MLX_IMG_ERROR), NULL);
-	if (!mlx_resize_image(img, MLX_WIN_WIDTH / width, MLX_WIN_WIDTH / height))
+	if (!mlx_resize_image(img, MLX_WIN_WIDTH / width, MLX_WIN_HEIGHT / height))
 		return (mlx_close_window(mlx), raise_error(MLX_IMG_ERROR), NULL);
 	if (mlx_image_to_window(mlx, img, 0, 0) == -1)
 		return (mlx_close_window(mlx), raise_error(MLX_IMG_ERROR), NULL);
+	garbage_collector(ADD_IMG, img);
 	return (img);
 }
 
@@ -50,6 +52,7 @@ mlx_image_t	*create_overlay(t_map *map, mlx_t *mlx, int width, int height)
 		return (NULL);
 	if (!texture)
 		return (mlx_close_window(mlx), raise_error(MLX_TEXTURE_ERROR), NULL);
+	garbage_collector(ADD_TEXTURE, texture);
 	img = mlx_texture_to_image(mlx, texture);
 	if (!img)
 		return (mlx_close_window(mlx), raise_error(MLX_IMG_ERROR), NULL);
@@ -57,6 +60,7 @@ mlx_image_t	*create_overlay(t_map *map, mlx_t *mlx, int width, int height)
 		return (mlx_close_window(mlx), raise_error(MLX_IMG_ERROR), NULL);
 	if (mlx_image_to_window(mlx, img, 0, 0) == -1)
 		return (mlx_close_window(mlx), raise_error(MLX_IMG_ERROR), NULL);
+	garbage_collector(ADD_IMG, img);
 	return (img);
 }
 
@@ -133,6 +137,7 @@ mlx_win_cursor_t	*create_mlx_cursor(void)
 	texture = mlx_load_png("./src/textures/player/cursor/crosshair1.png");
 	if (!texture)
 		return (raise_error(MLX_TEXTURE_ERROR), close_mlx(NULL), NULL);
+	garbage_collector(ADD_TEXTURE, texture);
 	return (mlx_create_cursor(texture));
 }
 
@@ -143,11 +148,12 @@ void	start_mlx(t_map_info *map_info)
 	mlx = mlx_init(MLX_WIN_WIDTH, MLX_WIN_HEIGHT, "so_long", true);
 	if (!mlx)
 		raise_error(MLX_ERROR);
+	garbage_collector(INIT, mlx);
 	close_mlx(mlx);
 	mlx_create_map(mlx, map_info);
-	init_all_npcs(mlx, map_info->map, init_player(mlx, map_info->map));
+	init_all_npcs(mlx, map_info, init_player(mlx, map_info));
 	mlx_set_cursor(mlx, create_mlx_cursor());
-	init_mlx_hooks(mlx);
+	init_mlx_hooks(mlx, map_info);
 	mlx_loop(mlx);
 	mlx_terminate(mlx);
 }

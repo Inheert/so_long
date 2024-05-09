@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 09:25:44 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/04/28 09:23:29 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/05/08 04:58:13 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,5 +91,6 @@ t_map_info	*map_parsing(char *filename)
 	map_info->map_height = map_len[1];
 	garbage_collector(DELETE, map_len);
 	map_info->map = map;
+	map_info->map->on_remove = false;
 	return (map_info);
 }

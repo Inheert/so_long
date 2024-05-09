@@ -6,13 +6,13 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 15:29:37 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/04/18 14:10:53 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/05/08 03:23:20 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/so_long.h"
 
-void	init_mlx_hooks(mlx_t *mlx)
+void	init_mlx_hooks(mlx_t *mlx, t_map_info *map_info)
 {
-	mlx_key_hook(mlx, &ft_key_hook, NULL);
+	mlx_key_hook(mlx, &ft_key_hook, map_info);
 }

@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 13:29:35 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/04/29 14:13:48 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/05/06 13:44:33 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	*player_anim_thread(void *param)
 	t_player		*player;
 
 	player = (t_player *)param;
-	if (!player)
+	if (!player || player->on_remove)
 		return (NULL);
 	if (!player->current_sprites && player->idle_sprites)
 		set_animation(player, player->idle_sprites, true);

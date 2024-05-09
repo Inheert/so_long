@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 12:23:45 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/04/29 11:48:52 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/05/09 11:10:57 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,19 +45,103 @@ void	actualize_player_map_pos(t_player *player, int x, int y, int speed)
 	}
 }
 
+void	is_player_in_vertex(t_player *player, int *x, int *y, int speed)
+{
+	mlx_image_t			*ply_collision;
+	t_map				*pos;
+
+	if (!player->ennemies[1])
+		return ;
+
+	ply_collision = player->collision->img;
+	pos = player->pos->left->upper;
+	if (*x == -1 && pos->slot[0] == '1' && ply_collision->instances[0].y
+		<= pos->img->instances[0].y + (int32_t)pos->img->height
+		&& ply_collision->instances[0].x - speed
+		<= pos->img->instances[0].x + (int32_t)pos->img->width)
+	{
+			*x = 0;
+	}
+	pos = player->pos->left->below;
+	if (*x == -1 && pos->slot[0] == '1' && ply_collision->instances[0].y
+		+ (int32_t)ply_collision->height >= pos->img->instances[0].y
+		&& ply_collision->instances[0].x - speed
+		<= pos->img->instances[0].x + (int32_t)pos->img->width)
+	{
+			*x = 0;
+	}
+	pos = player->pos->right->upper;
+	if (*x == 1 && pos->slot[0] == '1' && ply_collision->instances[0].y
+		<= pos->img->instances[0].y + (int32_t)pos->img->height &&
+		ply_collision->instances[0].x + (int32_t)ply_collision->width
+		+ speed >= pos->img->instances[0].x)
+	{
+			*x = 0;
+	}
+	pos = player->pos->right->below;
+	if (*x == 1 && pos->slot[0] == '1' && ply_collision->instances[0].y
+		+ (int32_t)ply_collision->height >= pos->img->instances[0].y
+		&& ply_collision->instances[0].x + (int32_t)ply_collision->width
+		+ speed >= pos->img->instances[0].x)
+	{
+			*x = 0;
+	}
+	pos = player->pos->left->upper;
+	if (*y == -1 && pos->slot[0] == '1' && ply_collision->instances[0].y
+		<= pos->img->instances[0].y + (int32_t)pos->img->height
+		&& ply_collision->instances[0].x - speed
+		>= pos->img->instances[0].x + (int32_t)pos->img->width)
+	{
+			*y = 0;
+	}
+	printf("%d ", *y);
+	pos = player->pos->right->upper;
+	if (*y == -1 && pos->slot[0] == '1' && ply_collision->instances[0].y
+		+ (int32_t)ply_collision->height <= pos->img->instances[0].y
+		+ (int32_t)pos->img->height && ply_collision->instances[0].x
+		+ (int32_t)ply_collision->width + speed >= pos->img->instances[0].x)
+	{
+			*y = 0;
+	}
+	printf("%d ", *y);
+	pos = player->pos->left->below;
+	if (*y == 1 && pos->slot[0] == '1' && ply_collision->instances[0].y
+		>= pos->img->instances[0].y && ply_collision->instances[0].x - speed
+		<= pos->img->instances[0].x + (int32_t)pos->img->width)
+	{
+			*y = 0;
+	}
+	printf("%d ", *y);
+	pos = player->pos->right->below;
+	if (*y == 1 && pos->slot[0] == '1' && ply_collision->instances[0].y
+		+ (int32_t)ply_collision->height >= pos->img->instances[0].y
+		&& ply_collision->instances[0].x + (int32_t)ply_collision->width
+		+ speed <= pos->img->instances[0].x)
+	{
+			*y = 0;
+	}
+	printf("%d       %d\n", *y, pos->slot[0] == '1' && ply_collision->instances[0].y
+		+ (int32_t)ply_collision->height >= pos->img->instances[0].y
+		&& ply_collision->instances[0].x + (int32_t)ply_collision->width
+		+ speed >= pos->img->instances[0].x);
+}
+
 bool	predict_player_pos(t_player	*player, int x, int y, int speed)
 {
 	mlx_image_t			*ply_collision;
 
 	ply_collision = player->collision->img;
+	is_player_in_vertex(player, &x, &y, speed);
+	if (x == 0 && y == 0)
+		return (false);
 	if (x == -1 && player->pos->left->slot[0] == '1')
 	{
-		if (ply_collision->instances[0].x - speed
+		if (ply_collision->instances[0].x + speed
 			<= player->pos->left->img->instances[0].x
 			+ (int32_t)player->pos->left->img->width)
 			return (false);
 	}
-	else if (x == 1 && player->pos->right->slot[0] == '1')
+	if (x == 1 && player->pos->right->slot[0] == '1')
 	{
 		if (ply_collision->instances[0].x + (int32_t)ply_collision->width
 			+ speed >= player->pos->right->img->instances[0].x)
@@ -70,12 +154,13 @@ bool	predict_player_pos(t_player	*player, int x, int y, int speed)
 			+ (int32_t)player->pos->left->img->height)
 			return (false);
 	}
-	else if (y == 1 && player->pos->below->slot[0] == '1')
+	if (y == 1 && player->pos->below->slot[0] == '1')
 	{
 		if (ply_collision->instances[0].y + (int32_t)ply_collision->height
 			+ speed >= player->pos->below->img->instances[0].y)
 			return (false);
 	}
+
 	actualize_player_map_pos(player, x, y, speed);
 	return (true);
 }

@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 11:45:11 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/04/29 14:13:53 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/05/06 13:43:20 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	*npc_movement_thread(void *param)
 	int			add_y;
 
 	npc = (t_player *)param;
-	if (!npc)
+	if (!npc || npc->on_remove)
 		return (NULL);
 	if (npc->npc_move_count >= NPC_TICK_BEFORE_MODIFY_MOVEMENT || npc->npc_move_count == 0)
 	{

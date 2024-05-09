@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 22:12:01 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/04/29 15:20:48 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/05/09 08:54:00 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ bool	is_shoot_hit_ennemy(t_player *player, t_point current_pos)
 	while (player->ennemies[i])
 	{
 		npc = player->ennemies[i++];
-		if (npc && current_pos.x >= npc->collision->img->instances[0].x
+		if (npc && !npc->on_remove && current_pos.x >= npc->collision->img->instances[0].x
 			&& current_pos.x <= npc->collision->img->instances[0].x
 			+ (int32_t)npc->collision->img->width
 			&& current_pos.y >= npc->collision->img->instances[0].y
@@ -85,7 +85,7 @@ bool	is_shoot_hit_map(t_player *player, t_point current_pos)
 	t_map	*map;
 
 	map = player->pos;
-	while (map != NULL)
+	while (map)
 	{
 		if (map->x <= current_pos.x && map->x + (int32_t)map->img->width
 			>= current_pos.x && map->y <= current_pos.y && map->y
@@ -116,6 +116,8 @@ void	draw_impact(t_point current_pos)
 	mlx_image_t		*img;
 	double			angle;
 	unsigned int	distance;
+	uint32_t		x;
+	uint32_t		y;
 
 	img = img_sharing(NULL);
 	if (!img)
@@ -126,11 +128,12 @@ void	draw_impact(t_point current_pos)
 		angle = 0;
 		while (angle < 2 * M_PI)
 		{
-			mlx_put_pixel(img, current_pos.x + cos(angle) * distance,
-				current_pos.y + sin(angle) * distance, BULLET_IMPACT_COLOR);
-			prepare_delete_bullet_trace(current_pos.x + cos(angle) * distance,
-				current_pos.y + sin(angle) * distance,
-				BULLET_IMPACT_VANISHING_TIME);
+			x = current_pos.x + cos(angle) * distance;
+			y = current_pos.y + sin(angle) * distance;
+			if (x >+ MLX_WIN_WIDTH || y >= MLX_WIN_HEIGHT)
+				break ;
+			mlx_put_pixel(img, x, y, BULLET_IMPACT_COLOR);
+			prepare_delete_bullet_trace(x, y, BULLET_IMPACT_VANISHING_TIME);
 			angle += M_PI / BULLET_IMPACT_LINE_PER_SIDE;
 			usleep(BULLET_IMPACT_SLOWNESS);
 		}
@@ -163,10 +166,10 @@ void	raycast(t_player *player, t_point start, t_point end, mlx_image_t *img)
 	current.y = start.y;
 	error = delta.x - delta.y;
 	player = (t_player *)player;
-	while (current.x > 0 && current.x < MLX_WIN_WIDTH
-		&& current.y > 0 && current.y < MLX_WIN_HEIGHT)
+	while (current.x > 0 && current.x < MLX_WIN_WIDTH - 10
+		&& current.y > 0 && current.y < MLX_WIN_HEIGHT - 10)
 	{
-		if (!player->mlx)
+		if (!player || !player->mlx || !player->pos || player->pos->on_remove)
 			return ;
 		if (is_shoot_hit_ennemy(player, current) || is_shoot_hit_map(player, current))
 		{
