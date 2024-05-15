@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 11:45:11 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/05/06 13:43:20 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/05/15 16:34:40 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void	npc_movement(void *param)
 {
 	pthread_t		tid;
 
-	if ((t_player *)param && ((t_player *)param)->on_remove)
+	if (!(t_player *)param || ((t_player *)param)->on_remove)
 		return ;
 	pthread_create(&tid, NULL, npc_movement_thread, param);
 	pthread_detach(tid);

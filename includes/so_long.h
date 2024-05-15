@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/25 14:39:28 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/05/09 09:04:55 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/05/15 19:37:23 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@
 # define MLX_IMG_WIDTH 150
 
 # define PLAYER_SIZE_DIV 10
-# define HITBOX_SIZE_DIV 15
+# define HITBOX_SIZE_DIV 10
 # define SHOW_COLLISION_BOX 1
 
 # define SPRITES_FRAME_RATE_PER_SEC 0.01
@@ -56,14 +56,18 @@
 # define S_HANDGUN_MELEE_PATH "./src/textures/player/handgun/meleeattack/survivor-meleeattack_handgun_"
 # define S_HANDGUN_MELEE_COUNT 14
 
-# define PLAYER_HEALTH 3
+# define PLAYER_HEALTH 300
 # define PLAYER_WALK_SPEED 600
 # define PLAYER_RUN_SPEED 1500
+# define PLAYER_DASH_SPEED 6000
+# define PLAYER_DASH_DURATION 10
 
 # define NPC_HEALTH 1
 # define NPC_WALK_SPEED 10
 # define MPC_RUN_SPEED 20
 # define NPC_TICK_BEFORE_MODIFY_MOVEMENT 25
+# define NPC_MIN_DELAY_BEFORE_SHOOT 10
+# define NPC_MAX_DELAY_BEFORE_SHOOT 150
 
 # define BULLET_TRACE_SLOWNESS 100
 # define BULLET_TRACE_VANISHING_TIME 15000
@@ -171,6 +175,7 @@ typedef struct s_player
 	t_sprites		*melee_sprites;
 	struct s_player	**ennemies;
 	unsigned int	health;
+	bool			can_dash;
 	bool			on_remove;
 	bool			already_remove;
 	double			x_aiming;
@@ -178,6 +183,8 @@ typedef struct s_player
 	int				npc_move_x;
 	int				npc_move_y;
 	int				npc_move_count;
+	int				npc_shoot_delay;
+	int				npc_shoot_waited;
 } t_player;
 
 typedef struct s_point
@@ -222,9 +229,10 @@ void		map_add_below(t_map **map, t_map *new);
 void		map_link_lines(t_map *first_line, t_map *second_line);
 void		apply_func_on_map(t_map *map, void (*f)(t_map *map, mlx_t *mlx, int width, int height));
 void		display_map(t_map *map, int display_link);
+int			random_in_range(int range);
 
 void		start_mlx(t_map_info *map_info);
-void		close_mlx(mlx_t *mlx);
+void		close_mlx(void *mlx);
 void		init_mlx_hooks(mlx_t *mlx, t_map_info *map_info);
 void		ft_key_hook(mlx_key_data_t keydata, void* param);
 
@@ -240,9 +248,13 @@ void		player_aiming(double x, double y, void *param);
 void		set_animation(t_player *player, t_sprites *sprites, bool force);
 void		remove_animation(t_player *player, t_sprites *sprites);
 void		on_mouse_action(mouse_key_t button, action_t action, modifier_key_t mods, void* param);
+void		shoot_bullet(t_player *player);
+void		raycast(t_player *player, t_point start, t_point end, mlx_image_t *img);
+mlx_image_t	*img_sharing(mlx_image_t *img);
 
 void		init_all_npcs(mlx_t *mlx, t_map_info *map, t_player *player);
 void		npc_movement(void *param);
+void		npc_shooter(void *param);
 
 void		kill_entity(t_player *ent, t_player *killer);
 #endif

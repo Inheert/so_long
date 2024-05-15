@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 16:15:54 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/05/09 09:03:56 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/05/15 18:27:45 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ void	create_player_collision(t_player *player, t_map_info *map)
 void	initialize_player_components(t_player *player, t_map_info *map)
 {
 	player->health = PLAYER_HEALTH;
+	player->can_dash = true;
 	player->idle_sprites = create_animation_chain(
 			player, map, true, S_HANDGUN_IDLE_PATH, S_HANDGUN_IDLE_COUNT, IDLE);
 	player->walking_sprites = create_animation_chain(

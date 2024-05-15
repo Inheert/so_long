@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 13:41:16 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/05/09 09:06:22 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/05/09 14:51:47 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,31 +45,31 @@ void	remove_sprites(t_player *ent)
 	if (!ent->walking_sprites)
 	{
 		remove_sprite(ent->mlx, ent->walking_sprites);
-		garbage_collector(DELETE, ent->walking_sprites);
+		//garbage_collector(DELETE, ent->walking_sprites);
 		ent->walking_sprites = NULL;
 	}
 	if (!ent->idle_sprites)
 	{
 		remove_sprite(ent->mlx, ent->idle_sprites);
-		garbage_collector(DELETE, ent->idle_sprites);
+		//garbage_collector(DELETE, ent->idle_sprites);
 		ent->idle_sprites = NULL;
 	}
 	if (!ent->shoot_sprites)
 	{
 		remove_sprite(ent->mlx, ent->shoot_sprites);
-		garbage_collector(DELETE, ent->shoot_sprites);
+		//garbage_collector(DELETE, ent->shoot_sprites);
 		ent->shoot_sprites = NULL;
 	}
 	if (!ent->reload_sprites)
 	{
 		remove_sprite(ent->mlx, ent->reload_sprites);
-		garbage_collector(DELETE, ent->reload_sprites);
+		//garbage_collector(DELETE, ent->reload_sprites);
 		ent->reload_sprites = NULL;
 	}
 	if (!ent->melee_sprites)
 	{
 		remove_sprite(ent->mlx, ent->melee_sprites);
-		garbage_collector(DELETE, ent->melee_sprites);
+		//garbage_collector(DELETE, ent->melee_sprites);
 		ent->melee_sprites = NULL;
 	}
 }

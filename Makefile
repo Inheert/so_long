@@ -6,7 +6,7 @@
 #    By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/25 14:27:18 by tclaereb          #+#    #+#              #
-#    Updated: 2024/05/09 09:06:38 by tclaereb         ###   ########.fr        #
+#    Updated: 2024/05/15 18:38:02 by tclaereb         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,6 +38,7 @@ _SRCS = main.c \
 		mlx/npc/npc.c \
 		mlx/npc/moover.c \
 		mlx/npc/kill_entity.c \
+		mlx/npc/shooter.c \
 
 SRCS_DIR = src
 

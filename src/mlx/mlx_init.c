@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 07:11:07 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/05/09 08:46:02 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/05/15 19:38:07 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,20 @@ mlx_image_t	*create_overlay(t_map *map, mlx_t *mlx, int width, int height)
 	return (img);
 }
 
+void	set_image_post(t_map *map, mlx_image_t *img, int width, int height)
+{
+	if (!map->left)
+		img->instances[0].x = 0;
+	else
+		img->instances[0].x = map->left->img->instances[0].x
+			+ MLX_WIN_WIDTH / width;
+	if (!map->upper)
+		img->instances[0].y = 0;
+	else
+		img->instances[0].y = map->upper->img->instances[0].y
+			+ MLX_WIN_HEIGHT / height;
+}
+
 void	set_img(t_map *map, mlx_t *mlx, int width, int height)
 {
 	static mlx_t	*smlx = NULL;
@@ -83,16 +97,7 @@ void	set_img(t_map *map, mlx_t *mlx, int width, int height)
 	img = create_img(map, smlx, map_width, map_height);
 	if (!img)
 		return ;
-	if (!map->left)
-		img->instances[0].x = 0;
-	else
-		img->instances[0].x = map->left->img->instances[0].x
-			+ MLX_WIN_WIDTH / map_width;
-	if (!map->upper)
-		img->instances[0].y = 0;
-	else
-		img->instances[0].y = map->upper->img->instances[0].y
-			+ MLX_WIN_HEIGHT / map_height;
+	set_image_post(map, img, map_width, map_height);
 	map->img = img;
 	map->x = img->instances[0].x;
 	map->y = img->instances[0].y;
@@ -158,17 +163,19 @@ void	start_mlx(t_map_info *map_info)
 	mlx_terminate(mlx);
 }
 
-void	close_mlx(mlx_t *mlx)
+void	close_mlx(void *mlx)
 {
 	static mlx_t	*smlx = NULL;
 
-	if (!smlx && mlx)
+	if (!smlx && (mlx_t *)mlx)
 	{
-		smlx = mlx;
+		if ((mlx_t *)mlx)
+			smlx = (mlx_t *)mlx;
 		return ;
 	}
 	if (!smlx)
 		return ;
+	usleep(1000000);
 	mlx_close_window(smlx);
 	garbage_collector(CLEAR, NULL);
 	exit(0);

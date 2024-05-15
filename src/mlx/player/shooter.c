@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 22:12:01 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/05/09 08:54:00 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/05/15 18:45:35 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,10 @@ bool	is_shoot_hit_ennemy(t_player *player, t_point current_pos)
 		{
 				npc->health--;
 				if (npc->health <= 0)
+				{
+					player->can_dash = true;
 					kill_entity(npc, player);
+				}
 				return (true);
 		}
 	}
@@ -149,7 +152,8 @@ void	raycast(t_player *player, t_point start, t_point end, mlx_image_t *img)
 	int		error;
 	int		error2;
 
-	img = img_sharing(NULL);
+	if (!img)
+		img = img_sharing(NULL);
 	if (!img)
 		return ;
 	delta.x = abs(end.x - start.x);
@@ -254,7 +258,7 @@ void	on_mouse_action(mouse_key_t button, action_t action,
 	t_player	*player;
 
 	player = (t_player *)param;
-	if (!player)
+	if (!player || player->on_remove)
 		return ;
 	if (button == MLX_MOUSE_BUTTON_LEFT && action == MLX_PRESS)
 		shoot_bullet(player);

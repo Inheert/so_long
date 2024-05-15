@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 09:38:39 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/05/09 11:01:18 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/05/15 17:29:35 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,20 @@ void	*initialize_npc_hooks(void *param)
 		return (NULL);
 	mlx_loop_hook(npc->mlx, &player_animation, npc);
 	mlx_loop_hook(npc->mlx, &npc_movement, npc);
+	mlx_loop_hook(npc->mlx, &npc_shooter, npc);
 	return (NULL);
+}
+
+int	random_in_range(int range)
+{
+	int					random_number;
+	unsigned long long	current_time;
+
+	current_time = mlx_get_time() * 1000000000;
+	random_number = (int)(current_time % (unsigned long long)(range));
+	if (random_number < NPC_MIN_DELAY_BEFORE_SHOOT)
+		return (NPC_MIN_DELAY_BEFORE_SHOOT);
+	return (random_number);
 }
 
 void	*initialize_npc_components(t_player *npc, t_map_info *map)
@@ -30,6 +43,8 @@ void	*initialize_npc_components(t_player *npc, t_map_info *map)
 
 	npc->health = NPC_HEALTH;
 	npc->on_remove = false;
+    npc->npc_shoot_delay = random_in_range(NPC_MAX_DELAY_BEFORE_SHOOT);
+	npc->npc_shoot_waited = 0;
 	npc->idle_sprites = create_animation_chain(
 			npc, map, true, S_HANDGUN_IDLE_PATH, S_HANDGUN_IDLE_COUNT, IDLE);
 	npc->walking_sprites = create_animation_chain(
@@ -39,7 +54,6 @@ void	*initialize_npc_components(t_player *npc, t_map_info *map)
 	npc->melee_sprites = create_animation_chain(
 			npc, map, false, S_HANDGUN_MELEE_PATH, S_HANDGUN_MELEE_COUNT, MELEE);
 	create_player_collision(npc, map);
-
 	pthread_create(&tid, NULL, initialize_npc_hooks, npc);
 	pthread_detach(tid);
 	return (NULL);

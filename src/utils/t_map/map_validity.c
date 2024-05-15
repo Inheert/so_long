@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 11:08:59 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/04/08 10:39:01 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/05/15 19:21:52 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	recursive_path_checker(t_map *map, int *is_path_valid)
 {
-	if (!map || *is_path_valid || map->slot[0] == '1')
+	if (!map || map->slot[0] == '1')
 		return ;
 	else if (map->slot[0] == 'E')
 	{
@@ -28,6 +28,24 @@ void	recursive_path_checker(t_map *map, int *is_path_valid)
 	recursive_path_checker(map->below, is_path_valid);
 }
 
+int	is_ennemy_accessible(t_map *map)
+{
+	t_map	*temp;
+
+	while (map)
+	{
+		temp = map;
+		while (temp)
+		{
+			if (temp->slot[0] == 'C')
+				return (0);
+			temp = temp->right;
+		}
+		map = map->below;
+	}
+	return (1);
+}
+
 int	is_valid_path_exist(t_map *map)
 {
 	t_map	*start_pos;
@@ -36,6 +54,7 @@ int	is_valid_path_exist(t_map *map)
 	start_pos = get_start_pos(map);
 	is_path_valid = 0;
 	recursive_path_checker(start_pos, &is_path_valid);
+	is_path_valid = is_ennemy_accessible(map);
 	return (is_path_valid);
 }
 
