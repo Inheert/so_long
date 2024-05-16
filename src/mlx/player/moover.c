@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 12:23:45 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/05/16 13:16:08 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/05/16 16:20:37 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,6 +177,25 @@ bool	is_game_finish(t_player *player)
 	return (true);
 }
 
+void	write_movement_count(mlx_t *mlx, int count, int32_t x, int32_t y)
+{
+	static	mlx_image_t *last_string = NULL;
+	static	bool		in_use = false;
+	char				*str;
+
+	if (in_use)
+		return ;
+	in_use = true;
+	str = ft_itoa(count);
+	if (!str)
+		return ;
+	if (last_string)
+		mlx_delete_image(mlx, last_string);
+	last_string = mlx_put_string(mlx, str, x, y);
+	free(str);
+	in_use = false;
+}
+
 void	*move_player(t_player *player, int x, int y, bool *input_pressed)
 {
 	int		speed;
@@ -199,6 +218,7 @@ void	*move_player(t_player *player, int x, int y, bool *input_pressed)
 	player->collision->y_pivot += to_add.y;
 	player->img->instances[0].x += to_add.x;
 	player->img->instances[0].y += to_add.y;
+	(player->npc_move_count)++;
 	if (is_game_finish(player))
 		close_mlx(NULL);
 	return (NULL);
@@ -226,4 +246,9 @@ void	player_movement(void *param)
 		move_player(player, 1, 0, &input_pressed);
 	if (!input_pressed)
 		remove_animation(player, player->walking_sprites);
+	else
+	{
+		write_movement_count(player->mlx, player->npc_move_count,
+		player->collision->x_pivot, player->collision->y_pivot);
+	}
 }

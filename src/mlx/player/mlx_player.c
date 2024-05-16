@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 16:15:54 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/05/16 13:40:55 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/05/16 16:13:54 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ void	initialize_player_components(t_player *player, t_map_info *map)
 {
 	player->health = PLAYER_HEALTH;
 	player->can_dash = true;
+	player->npc_move_count = 0;
 	player->idle_sprites = create_animation_chain(
 			player, map, true, S_HANDGUN_IDLE_PATH);
 	player->walking_sprites = create_animation_chain(

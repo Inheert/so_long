@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 07:11:07 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/05/16 13:37:45 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/05/16 16:43:41 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,20 +166,22 @@ void	start_mlx(t_map_info *map_info)
 	mlx_terminate(mlx);
 }
 
-void	close_mlx(void *mlx)
+void	close_mlx(void *ptr)
 {
 	static mlx_t	*smlx = NULL;
 
-	if (!smlx && (mlx_t *)mlx)
+	if (!smlx && (mlx_t *)ptr)
 	{
-		if ((mlx_t *)mlx)
-			smlx = (mlx_t *)mlx;
+		if ((mlx_t *)ptr)
+			smlx = (mlx_t *)ptr;
 		return ;
 	}
 	if (!smlx)
 		return ;
+	is_garbage_being_cleaned(1);
 	usleep(1000000);
 	mlx_close_window(smlx);
 	garbage_collector(CLEAR, NULL);
+	mlx_terminate(smlx);
 	exit(0);
 }

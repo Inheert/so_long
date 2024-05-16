@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 22:12:01 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/05/16 13:46:06 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/05/16 17:49:08 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ void	*delete_bullet_trace(void *args)
 	img = img_sharing(NULL);
 	mlx_put_pixel(img, x, y, 0x43ff6400);
 	free(args);
+	pthread_exit(NULL);
+	//printf("%d %d - Bullet param free\n", x, y);
 	return (NULL);
 }
 
@@ -46,8 +48,6 @@ void	prepare_delete_bullet_trace(int32_t x, int32_t y, uint32_t delay)
 	pthread_t	tid;
 
 	param = malloc(sizeof(t_param) * 1);
-	if (!param)
-		return ;
 	param->x = x;
 	param->y = y;
 	param->delay = delay;
@@ -64,7 +64,8 @@ bool	is_shoot_hit_ennemy(t_player *player, t_point current_pos)
 	while (player->ennemies[i])
 	{
 		npc = player->ennemies[i++];
-		if (npc && !npc->on_remove && current_pos.x >= npc->collision->img->instances[0].x
+		if (npc && !npc->on_remove && current_pos.x
+			>= npc->collision->img->instances[0].x
 			&& current_pos.x <= npc->collision->img->instances[0].x
 			+ (int32_t)npc->collision->img->width
 			&& current_pos.y >= npc->collision->img->instances[0].y
@@ -87,9 +88,13 @@ bool	is_shoot_hit_map(t_player *player, t_point current_pos)
 {
 	t_map	*map;
 
+	if (!player)
+		return (false);
 	map = player->pos;
-	while (map)
+	while (player && map)
 	{
+		if (is_garbage_being_cleaned(-1))
+			return (pthread_cancel(pthread_self()), false);
 		if (map->x <= current_pos.x && map->x + (int32_t)map->img->width
 			>= current_pos.x && map->y <= current_pos.y && map->y
 			+ (int32_t)map->img->height >= current_pos.y)
@@ -98,16 +103,16 @@ bool	is_shoot_hit_map(t_player *player, t_point current_pos)
 				return (true);
 			break ;
 		}
-		if (map && current_pos.x > map->x && current_pos.x
+		if (current_pos.x > map->x && current_pos.x
 			> map->img->instances[0].x + (int32_t)map->img->width)
 			map = map->right;
-		else if (map && current_pos.x < map->x && current_pos.x
+		else if (current_pos.x < map->x && current_pos.x
 			< map->img->instances[0].x + (int32_t)map->img->width)
 			map = map->left;
-		if (map && current_pos.y > map->y && current_pos.y
+		if (current_pos.y > map->y && current_pos.y
 			> map->img->instances[0].y + (int32_t)map->img->height)
 			map = map->below;
-		else if (map && current_pos.y < map->y && current_pos.y
+		else if (current_pos.y < map->y && current_pos.y
 			< map->img->instances[0].y + (int32_t)map->img->height)
 			map = map->upper;
 	}
@@ -144,7 +149,7 @@ void	draw_impact(t_point current_pos)
 	}
 }
 
-void	raycast(t_player *player, t_point start, t_point end, mlx_image_t *img)
+void	*raycast(t_player *player, t_point start, t_point end, mlx_image_t *img)
 {
 	t_point	delta;
 	t_point	step;
@@ -155,7 +160,7 @@ void	raycast(t_player *player, t_point start, t_point end, mlx_image_t *img)
 	if (!img)
 		img = img_sharing(NULL);
 	if (!img)
-		return ;
+		return (NULL);
 	delta.x = abs(end.x - start.x);
 	delta.y = abs(end.y - start.y);
 	if (start.x < end.x)
@@ -173,8 +178,10 @@ void	raycast(t_player *player, t_point start, t_point end, mlx_image_t *img)
 	while (current.x > 0 && current.x < MLX_WIN_WIDTH - 10
 		&& current.y > 0 && current.y < MLX_WIN_HEIGHT - 10)
 	{
+		if (is_garbage_being_cleaned(-1))
+			return (pthread_cancel(pthread_self()), NULL);
 		if (!player || !player->mlx || !player->pos || player->pos->on_remove)
-			return ;
+			return (NULL);
 		if (is_shoot_hit_ennemy(player, current) || is_shoot_hit_map(player, current))
 		{
 			draw_impact(current);
@@ -196,6 +203,7 @@ void	raycast(t_player *player, t_point start, t_point end, mlx_image_t *img)
 			BULLET_TRACE_VANISHING_TIME);
 		usleep(BULLET_TRACE_SLOWNESS);
 	}
+	return (NULL);
 }
 
 void	*start_raycast(void *args)

@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 13:41:16 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/05/16 13:18:17 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/05/16 16:53:44 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void	remove_sprites(t_player *ent)
 		return ;
 	if (ent->current_sprites)
 	{
-		remove_sprite(ent->mlx, ent->current_sprites);
+		ent->current_sprites->img->enabled = false;
 		ent->current_sprites = NULL;
 	}
 	if (!ent->walking_sprites)
@@ -108,6 +108,7 @@ void	kill_entity(t_player *ent, t_player *killer)
 	}
 	if (killer->ennemies[i - 1] == ent)
 		killer->ennemies[i - 1] = NULL;
+	usleep(20000);
 	pthread_mutex_lock(&ent->anim_mutex);
 	remove_sprites(ent);
 	remove_hitbox(ent);

@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/25 14:39:28 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/05/16 13:40:13 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/05/16 17:03:49 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@
 
 # define PLAYER_SIZE_DIV 10
 # define HITBOX_SIZE_DIV 10
-# define SHOW_COLLISION_BOX 1
+# define SHOW_COLLISION_BOX 0
 
 # define SPRITES_FRAME_RATE_PER_SEC 0.01
 # define S_HANDGUN_IDLE_PATH "./src/textures/player/handgun/idle/survivor-idle_handgun_"
@@ -87,6 +87,7 @@ typedef enum {
 	ADD_TEXTURE,
 	ADD_IMG,
 	DELETE,
+	DELETE_TEXTURE,
 	CLEAR,
 	DISPLAY,
 } t_garbage_action;
@@ -213,6 +214,7 @@ void		garbage_collector(t_garbage_action action, void *ptr);
 void		check_args(int argc, char **argv);
 char		*ft_strjoin_enhanced(char *s1, char *s2);
 char		*get_full_path(char *filename);
+int			is_garbage_being_cleaned(int set);
 int			is_valid_symbol(char symbol[2]);
 int			is_wall_valid(t_map *map);
 int			is_char_missing(t_map *map, t_map *tmp);
@@ -249,7 +251,7 @@ void		set_animation(t_player *player, t_sprites *sprites, bool force);
 void		remove_animation(t_player *player, t_sprites *sprites);
 void		on_mouse_action(mouse_key_t button, action_t action, modifier_key_t mods, void* param);
 void		shoot_bullet(t_player *player);
-void		raycast(t_player *player, t_point start, t_point end, mlx_image_t *img);
+void		*raycast(t_player *player, t_point start, t_point end, mlx_image_t *img);
 mlx_image_t	*img_sharing(mlx_image_t *img);
 
 void		init_all_npcs(mlx_t *mlx, t_map_info *map, t_player *player);

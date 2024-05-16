@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 09:11:56 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/05/16 13:36:05 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/05/16 15:13:58 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,8 @@ void	raise_error(char *error, void *ptr)
 	}
 	if (mlx)
 		mlx_terminate(mlx);
+	is_garbage_being_cleaned(1);
+	usleep(1000000);
 	garbage_collector(CLEAR, NULL);
 	ft_printf("Error: %s\n", error);
 	exit(1);

@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 07:56:02 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/05/16 13:36:00 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/05/16 17:03:52 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,6 +133,15 @@ void display_garbage(t_garbage *garbage)
 	}
 }
 
+int	is_garbage_being_cleaned(int set)
+{
+	static int	cleaning = 0;
+
+	if (set == 0 || set == 1)
+		cleaning = set;
+	return (cleaning);
+}
+
 void	garbage_collector(t_garbage_action action, void *ptr)
 {
 	static mlx_t		*mlx = NULL;
@@ -150,6 +159,8 @@ void	garbage_collector(t_garbage_action action, void *ptr)
 		add_garbage(&img_garbage, ptr);
 	else if (action == DELETE)
 		delete_garbage(&garbage, ptr);
+	else if (action == DELETE_TEXTURE)
+		delete_garbage(&texture_garbage, ptr);
 	else if (action == CLEAR)
 		clear_garbage(mlx, &garbage, &texture_garbage, &img_garbage);
 	else if (action == DISPLAY)
