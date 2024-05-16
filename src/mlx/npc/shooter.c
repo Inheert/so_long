@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 16:31:30 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/05/15 18:27:33 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/05/16 13:20:37 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,8 @@ void	npc_shooter(void *param)
 	npc = (t_player *)param;
 	if (!npc || ((t_player *)param)->on_remove || !npc->ennemies[0])
 		return ;
-	if (++(npc->npc_shoot_waited) < npc->npc_shoot_delay || npc->ennemies[0]->on_remove)
+	if (++(npc->npc_shoot_waited) < npc->npc_shoot_delay
+		|| npc->ennemies[0]->on_remove)
 		return ;
 	npc->npc_shoot_delay = random_in_range(NPC_MAX_DELAY_BEFORE_SHOOT);
 	npc->npc_shoot_waited = 0;

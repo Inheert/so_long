@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 12:23:45 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/05/15 19:12:34 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/05/16 13:16:08 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,11 +177,10 @@ bool	is_game_finish(t_player *player)
 	return (true);
 }
 
-void	move_player(t_player *player, int x, int y, bool *input_pressed)
+void	*move_player(t_player *player, int x, int y, bool *input_pressed)
 {
-	int	speed;
-	int	add_x;
-	int	add_y;
+	int		speed;
+	t_point	to_add;
 
 	*input_pressed = true;
 	set_animation(player, player->walking_sprites, false);
@@ -191,17 +190,18 @@ void	move_player(t_player *player, int x, int y, bool *input_pressed)
 		speed = PLAYER_WALK_SPEED * player->mlx->delta_time;
 	speed = manage_dash(player, speed);
 	if (!predict_player_pos(player, x, y, speed))
-		return ;
-	add_x = x * speed;
-	add_y = y * speed;
-	player->collision->img->instances[0].x += add_x;
-	player->collision->img->instances[0].y += add_y;
-	player->collision->x_pivot += add_x;
-	player->collision->y_pivot += add_y;
-	player->img->instances[0].x += add_x;
-	player->img->instances[0].y += add_y;
+		return (NULL);
+	to_add.x = x * speed;
+	to_add.y = y * speed;
+	player->collision->img->instances[0].x += to_add.x;
+	player->collision->img->instances[0].y += to_add.y;
+	player->collision->x_pivot += to_add.x;
+	player->collision->y_pivot += to_add.y;
+	player->img->instances[0].x += to_add.x;
+	player->img->instances[0].y += to_add.y;
 	if (is_game_finish(player))
 		close_mlx(NULL);
+	return (NULL);
 }
 
 void	player_movement(void *param)

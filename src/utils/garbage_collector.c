@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 07:56:02 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/05/08 04:54:49 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/05/16 13:36:00 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ t_garbage	*new_garbage(void *ptr)
 	if (!garbage)
 	{
 		free(ptr);
-		raise_error(MALLOC_ERROR);
+		raise_error(MALLOC_ERROR, NULL);
 	}
 	garbage->content = ptr;
 	garbage->next = NULL;

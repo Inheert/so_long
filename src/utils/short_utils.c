@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 09:11:56 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/05/08 01:09:22 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/05/16 13:36:05 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,12 @@ void	check_args(int argc, char **argv)
 	int	fd;
 
 	if (argc != 2)
-		raise_error(NO_VALID_ARGS_COUNT);
+		raise_error(NO_VALID_ARGS_COUNT, NULL);
 	else if (!ft_strnstr(argv[1], ".ber", ft_strlen(argv[1])))
-		raise_error(NO_VALID_ARG);
+		raise_error(NO_VALID_ARG, NULL);
 	fd = open(get_full_path(argv[1]), O_RDONLY);
 	if (fd < 0)
-		raise_error(NO_VALID_ARG);
+		raise_error(NO_VALID_ARG, NULL);
 }
 
 char	*ft_strjoin_enhanced(char *s1, char *s2)
@@ -66,8 +66,17 @@ ssize_t	str_ptr_len(char **str)
 	return (len);
 }
 
-void	raise_error(char *error)
+void	raise_error(char *error, void *ptr)
 {
+	static mlx_t	*mlx = NULL;
+
+	if (ptr && (mlx_t *)ptr && !mlx)
+	{
+		mlx = (mlx_t *)ptr;
+		return ;
+	}
+	if (mlx)
+		mlx_terminate(mlx);
 	garbage_collector(CLEAR, NULL);
 	ft_printf("Error: %s\n", error);
 	exit(1);

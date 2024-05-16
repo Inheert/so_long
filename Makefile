@@ -6,7 +6,7 @@
 #    By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/25 14:27:18 by tclaereb          #+#    #+#              #
-#    Updated: 2024/05/15 18:38:02 by tclaereb         ###   ########.fr        #
+#    Updated: 2024/05/16 13:42:30 by tclaereb         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -49,7 +49,7 @@ SRCO = $(SRCS:.c=.o)
 MAKE_LIBFT = $(MAKE) -C ./libft
 LIBFT = ./libft/libft.a
 
-FLAG = -g3 -Wall -Wextra -Werror -fsanitize=address
+FLAG = -g3 -Wall -Wextra -Werror
 INC = -I includes/
 
 all : $(NAME_C) $(NAME_P)

@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 22:12:01 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/05/15 18:45:35 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/05/16 13:46:06 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,16 +98,16 @@ bool	is_shoot_hit_map(t_player *player, t_point current_pos)
 				return (true);
 			break ;
 		}
-		if (current_pos.x > map->x && current_pos.x
+		if (map && current_pos.x > map->x && current_pos.x
 			> map->img->instances[0].x + (int32_t)map->img->width)
 			map = map->right;
-		else if (current_pos.x < map->x && current_pos.x
+		else if (map && current_pos.x < map->x && current_pos.x
 			< map->img->instances[0].x + (int32_t)map->img->width)
 			map = map->left;
-		if (current_pos.y > map->y && current_pos.y
+		if (map && current_pos.y > map->y && current_pos.y
 			> map->img->instances[0].y + (int32_t)map->img->height)
 			map = map->below;
-		else if (current_pos.y < map->y && current_pos.y
+		else if (map && current_pos.y < map->y && current_pos.y
 			< map->img->instances[0].y + (int32_t)map->img->height)
 			map = map->upper;
 	}
@@ -227,6 +227,8 @@ void	prepare_raycast_thread(t_player *player, t_point start, t_point end)
 	param->player = player;
 	param->start = start;
 	param->end = end;
+	if (param->player->on_remove)
+		return ;
 	pthread_create(&tid, NULL, start_raycast, param);
 	pthread_detach(tid);
 }

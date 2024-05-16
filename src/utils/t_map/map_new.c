@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 09:03:28 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/04/10 10:17:14 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/05/16 13:36:10 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ t_map	*map_new(char slot[2])
 	if (slot[1] == '\n')
 		slot[1] = '\0';
 	if (!is_valid_symbol(slot))
-		raise_error(UNKNOW_MAP_SYMBOL);
+		raise_error(UNKNOW_MAP_SYMBOL, NULL);
 	ft_memcpy(map->slot, slot, 2);
 	map->left = NULL;
 	map->right = NULL;

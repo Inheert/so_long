@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/25 14:39:28 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/05/15 19:37:23 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/05/16 13:40:13 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,9 +57,9 @@
 # define S_HANDGUN_MELEE_COUNT 14
 
 # define PLAYER_HEALTH 300
-# define PLAYER_WALK_SPEED 600
-# define PLAYER_RUN_SPEED 1500
-# define PLAYER_DASH_SPEED 6000
+# define PLAYER_WALK_SPEED 500
+# define PLAYER_RUN_SPEED 1000
+# define PLAYER_DASH_SPEED 2500
 # define PLAYER_DASH_DURATION 10
 
 # define NPC_HEALTH 1
@@ -174,10 +174,10 @@ typedef struct s_player
 	t_sprites		*reload_sprites;
 	t_sprites		*melee_sprites;
 	struct s_player	**ennemies;
+	pthread_mutex_t	anim_mutex;
 	unsigned int	health;
 	bool			can_dash;
 	bool			on_remove;
-	bool			already_remove;
 	double			x_aiming;
 	double			y_aiming;
 	int				npc_move_x;
@@ -208,7 +208,7 @@ typedef struct s_param {
 
 ssize_t 	str_ptr_len(char **str);
 void		*ft_malloc(size_t size, size_t nmemb);
-void		raise_error(char *error);
+void		raise_error(char *error, void *ptr);
 void		garbage_collector(t_garbage_action action, void *ptr);
 void		check_args(int argc, char **argv);
 char		*ft_strjoin_enhanced(char *s1, char *s2);
@@ -238,7 +238,7 @@ void		ft_key_hook(mlx_key_data_t keydata, void* param);
 
 t_player	*init_player(mlx_t *mlx, t_map_info *map);
 t_map		*find_player_pos(t_map *map);
-t_sprites	*create_animation_chain(t_player *player, t_map_info *map, bool is_loop, char *sprites_path, unsigned char sprites_count, t_sprite_types type);
+t_sprites	*create_animation_chain(t_player *player, t_map_info *map, bool is_loop, char *sprites_path);
 bool		predict_player_pos(t_player	*player, int x, int y, int speed);
 void		create_player_collision(t_player *player, t_map_info *map);
 

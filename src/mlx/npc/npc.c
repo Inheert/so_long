@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 09:38:39 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/05/15 17:29:35 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/05/16 13:40:48 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,16 +43,17 @@ void	*initialize_npc_components(t_player *npc, t_map_info *map)
 
 	npc->health = NPC_HEALTH;
 	npc->on_remove = false;
-    npc->npc_shoot_delay = random_in_range(NPC_MAX_DELAY_BEFORE_SHOOT);
+	npc->npc_shoot_delay = random_in_range(NPC_MAX_DELAY_BEFORE_SHOOT);
 	npc->npc_shoot_waited = 0;
 	npc->idle_sprites = create_animation_chain(
-			npc, map, true, S_HANDGUN_IDLE_PATH, S_HANDGUN_IDLE_COUNT, IDLE);
+			npc, map, true, S_HANDGUN_IDLE_PATH);
 	npc->walking_sprites = create_animation_chain(
-			npc, map, true, S_HANDGUN_WALK_PATH, S_HANDGUN_WALK_COUNT, WALK);
+			npc, map, true, S_HANDGUN_WALK_PATH);
 	npc->shoot_sprites = create_animation_chain(
-			npc, map, false, S_HANDGUN_SHOOT_PATH, S_HANDGUN_SHOOT_COUNT, SHOOT);
+			npc, map, false, S_HANDGUN_SHOOT_PATH);
 	npc->melee_sprites = create_animation_chain(
-			npc, map, false, S_HANDGUN_MELEE_PATH, S_HANDGUN_MELEE_COUNT, MELEE);
+			npc, map, false, S_HANDGUN_MELEE_PATH);
+	pthread_mutex_init(&npc->anim_mutex, NULL);
 	create_player_collision(npc, map);
 	pthread_create(&tid, NULL, initialize_npc_hooks, npc);
 	pthread_detach(tid);
@@ -65,23 +66,23 @@ t_player	*init_npc(mlx_t *mlx, t_map *pos, t_map_info *map)
 	mlx_texture_t	*texture;
 
 	if (!mlx || !pos)
-		raise_error(NPC_CREATION_ERROR);
+		raise_error(NPC_CREATION_ERROR, NULL);
 	texture = mlx_load_png(
 			"./src/textures/player/handgun/idle/survivor-idle_handgun_0.png");
 	if (!texture)
-		return (raise_error(MLX_TEXTURE_ERROR), close_mlx(NULL), NULL);
+		return (raise_error(MLX_TEXTURE_ERROR, NULL), close_mlx(NULL), NULL);
 	garbage_collector(ADD_TEXTURE, texture);
 	npc = ft_malloc(sizeof(t_player), 1);
 	npc->mlx = mlx;
 	npc->pos = pos;
 	npc->img = mlx_texture_to_image(mlx, texture);
 	if (!npc->img)
-		return (raise_error(MLX_IMG_ERROR), close_mlx(NULL), NULL);
+		return (raise_error(MLX_IMG_ERROR, NULL), close_mlx(NULL), NULL);
 	if (!mlx_resize_image(npc->img,
 			MLX_WIN_WIDTH / map->map_width, MLX_WIN_WIDTH / map->map_height))
-		return (mlx_close_window(mlx), raise_error(MLX_IMG_ERROR), NULL);
+		return (mlx_close_window(mlx), raise_error(MLX_IMG_ERROR, NULL), NULL);
 	if (mlx_image_to_window(mlx, npc->img, pos->x, pos->y))
-		return (raise_error(MLX_IMG_ERROR), close_mlx(NULL), NULL);
+		return (raise_error(MLX_IMG_ERROR, NULL), close_mlx(NULL), NULL);
 	garbage_collector(ADD_IMG, npc->img);
 	npc->img->enabled = false;
 	initialize_npc_components(npc, map);
